@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="40"
+   height="40"
+   viewBox="0 0 10.583333 10.583334"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="..\..\AppData\Roaming\FreeCAD\Mod\BeltConvyorWB\icons\beltcv.svg"
+   inkscape:export-xdpi="43.636364"
+   inkscape:export-ydpi="43.636364"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   sodipodi:docname="beltcv.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="8.1336326"
+     inkscape:cx="23.113904"
+     inkscape:cy="28.339121"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g2"
+       transform="matrix(1.1328904,0,0,1.2073343,-0.8732769,2.619937)">
+      <path
+         style="fill:#ff0000;fill-opacity:0.987342;stroke:#000000;stroke-width:0.104847;stroke-opacity:0.981013"
+         d="m 1.8541838,1.5288883 c 7.3516761,0 7.3516761,0 7.3516761,0"
+         id="path2" />
+      <g
+         id="g1"
+         transform="matrix(0.99988506,0,0,1.0196149,6.2868036e-4,-0.06262188)">
+        <ellipse
+           style="fill:#ff0000;fill-opacity:0.987342;stroke:#000000;stroke-width:0.106;stroke-opacity:0.981013"
+           id="path1"
+           cx="1.8216544"
+           cy="2.3421268"
+           rx="0.8132385"
+           ry="0.78070897" />
+        <ellipse
+           style="fill:#ff0000;fill-opacity:0.987342;stroke:#000000;stroke-width:0.106;stroke-opacity:0.981013"
+           id="path1-8"
+           cx="9.1180935"
+           cy="2.3411543"
+           rx="0.8132385"
+           ry="0.78070897" />
+        <path
+           style="fill:#ff0000;fill-opacity:0.987342;stroke:#000000;stroke-width:0.104847;stroke-opacity:0.981013"
+           d="m 1.7631887,3.1668575 c 7.3516761,0 7.3516761,0 7.3516761,0"
+           id="path2-5" />
+      </g>
+    </g>
+  </g>
+</svg>
