@@ -8,6 +8,7 @@ import Sketcher
 import PartDesign
 import FreeCAD as App
 import FreeCADGui as Gui
+import math
 
 from PySide import QtGui
 from PySide import QtUiTools
@@ -93,43 +94,76 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "BeltConveyor", None))
         
     def setParts(self):
-        global spreadsheet
+        global Spreadsheet
+        global parts_group
+        selection=''
         selection = Gui.Selection.getSelection()
         if selection:
              selected_object = selection[0]
              if selected_object.TypeId == "App::Part":
                  parts_group = selected_object
+                 print(parts_group.Label)
                  for obj in parts_group.Group:
+                     #print(obj.Label)
                      if obj.TypeId == "Spreadsheet::Sheet":
-                         spreadsheet = obj
+                         Spreadsheet=obj
+                         #print(obj.Label)
 
-        self.comboBox_B.setCurrentText(spreadsheet.getContents('F2'))     
-        self.le_C.setText(spreadsheet.getContents('C0'))  
-        self.le_h.setText(spreadsheet.getContents('Ht'))  
-        self.le_k.setText(spreadsheet.getContents('k'))        
+                         self.comboBox_B.setCurrentText(obj.getContents('F2'))     
+                         self.le_C.setText(Spreadsheet.getContents('C0'))  
+                         self.le_h.setText(Spreadsheet.getContents('Ht'))  
+                         self.le_k.setText(Spreadsheet.getContents('k'))  
+                         #print('aaaaaaaaaaaaaaaaaaa')
+                         #parts_group.placement
+
+
+
 
     def update(self):
+
         try:
+            h00=0
             key=self.comboBox_B.currentText()
             sa=BDim[key]
             L=self.le_C.text()
-            Ht=self.le_h.text()
+            Ht=float(self.le_h.text())
+            h00=Ht-1000
             k=self.le_k.text()
-            spreadsheet.set('C0',L)
-            spreadsheet.set('B0',key)
-            spreadsheet.set('b1',str(sa[0]))#b1
-            spreadsheet.set('b2',str(sa[1]))#b2
-            spreadsheet.set('t0',str(sa[2]))#t0
-            spreadsheet.set('D0',str(sa[3]))#D0  
-            spreadsheet.set('d1',str(sa[4]))#d1 
-            spreadsheet.set('d2',str(sa[5]))#d2
-            spreadsheet.set('Ls',str(sa[6]))#Ls
-            spreadsheet.set('h0',str(sa[7]))#h0
-            spreadsheet.set('Ht',Ht)#Ht
-            spreadsheet.set('k',k)#k
+            #print('aaaaaaaaaaaaaaaaaaa')
+            Spreadsheet.set('C0',L)
+            Spreadsheet.set('B0',key)
+            Spreadsheet.set('b1',str(sa[0]))#b1
+            
+            Spreadsheet.set('b2',str(sa[1]))#b2
+            Spreadsheet.set('t0',str(sa[2]))#t0
+            Spreadsheet.set('D0',str(sa[3]))#D0  
+            
+            Spreadsheet.set('d1',str(sa[4]))#d1 
+            
+            Spreadsheet.set('d2',str(sa[5]))#d2
+            
+            
+            Spreadsheet.set('Ls',str(sa[6]))#Ls
+            Spreadsheet.set('h0',str(sa[7]))#h0
+            
+            Spreadsheet.set('Ht',str(Ht))#Ht
+            Spreadsheet.set('k',k)#k
+            
+            placement = parts_group.Placement
+            parts_group.Placement=App.Placement(App.Vector(placement.Base.x,placement.Base.y,Ht),App.Rotation(App.Vector(0,0,1),0))
+            #print('aaaaaaaaaaaaaaaaa')
+            N=int((float(L)-1400)/2500)+1
+            
+            postX=(float(L)-1400)*math.cos(float(k)/57.3)/N
+            print(postX)
+            Spreadsheet.set('postN',str(N))
+            Spreadsheet.set('postX',str(postX))
+
+
             App.ActiveDocument.recompute()
         except:
-            return    
+            print('select an object')    
+        
     
     def create(self): 
          W0=self.comboBox_B.currentText()
