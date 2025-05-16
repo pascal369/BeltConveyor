@@ -339,6 +339,8 @@ class Ui_Dialog(object):
             paramPulley.Pulleys(obj)
             obj.ViewObject.Proxy=0
             FreeCAD.ActiveDocument.recompute()   
+
+            
         Gui.SendMsgToActiveView("ViewFit")    
 
 class main():
