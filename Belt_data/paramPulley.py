@@ -77,7 +77,8 @@ class Pulleys:
             pface = Part.Face(pwire)
             c01=pface.revolve(Base.Vector(0,0.0,0),Base.Vector(1,0,0),360)
             c00=c00.fuse(c01)
-
+            #c00.Placement=App.Placement(App.Vector(0,0,0),App.Rotation(App.Vector(0,0,1),90))
+            #Part.show(c00)
            
         def HeadP(self):
             global c00
@@ -137,17 +138,6 @@ class Pulleys:
             DriveP(self) 
         else:
             HeadP(self) 
-        g0=7.85
-        g=c00.Volume*g0*1000/10**9 
-        label='mass[kg]'
-        try:
-            obj.addProperty("App::PropertyFloat", "mass",label)
-            obj.mass=g
-            obj.ViewObject.Proxy=0
-        except:
-            obj.mass=g
-            obj.ViewObject.Proxy=0
-            pass          
 
         obj.Shape=c00
        

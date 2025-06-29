@@ -37,7 +37,7 @@ class MotorPly:
         G2=App.ActiveDocument.getObject(label).G2
         H=App.ActiveDocument.getObject(label).H
         P=App.ActiveDocument.getObject(label).P
-        g=App.ActiveDocument.getObject(label).g
+
         x0=a+A/2
 
         x4=float(H+G1-N1)
@@ -198,18 +198,9 @@ class MotorPly:
         c3=c00
         c1=c1.fuse(c3)
         c1.Placement=App.Placement(App.Vector(0,0,0),App.Rotation(App.Vector(0,0,1),90))
-
-        label='mass[kg]'
-        try:
-            obj.addProperty("App::PropertyFloat", "mass",label)
-            obj.mass=g
-            obj.ViewObject.Proxy=0
-        except:
-            obj.mass=g
-            obj.ViewObject.Proxy=0
-            pass   
+        #Part.show(c1)
         obj.Shape=c1
-
+        #Gui.SendMsgToActiveView("ViewFit")
     
 
 

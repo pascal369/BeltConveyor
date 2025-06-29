@@ -271,7 +271,6 @@ class Ui_Dialog(object):
         global G2
         global H
         global P
-        global g
         global x4
         global x5
         global x6
@@ -304,7 +303,6 @@ class Ui_Dialog(object):
         G2=float(sa[19]) 
         H=float(sa[20]) 
         P=float(sa[21]) 
-        g=sa[22]
 
 
         self.lineEdit_10.setText(str(L))
@@ -366,7 +364,7 @@ class Ui_Dialog(object):
         obj.addProperty("App::PropertyFloat", "G2",label).G2=G2
         obj.addProperty("App::PropertyFloat", "H",label).H=H
         obj.addProperty("App::PropertyFloat", "P",label).P=P
-        obj.addProperty("App::PropertyFloat", "g",label).g=g
+         
 
         paramMtrPly.MotorPly(obj)
         obj.ViewObject.Proxy=0
