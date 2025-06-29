@@ -10,10 +10,10 @@ from PySide import QtCore
 from FreeCAD import Base
 import FreeCAD, Part, math
 from math import pi
-
+Vscraper_haba=['500','600','750']
 belt_haba=['400','450','500','600','700','750','800','900','1000',]
-belt_buhin=['Assy','Belt','Pulleys','MotorPulley','Carrier','Return','CarrierRoller','ReturnRoller',
-            'SideRoller','Take-UP','Take-UpAssy','PillowBlock',]
+belt_buhin=['Assy','Frame','Belt','Pulleys','MotorPulley','Carrier','Return','CarrierRoller','ReturnRoller',
+            'SideRoller','Take-UP','Take-UpAssy','PillowBlock','V-shaped scraper']
 spec_roller=['RubberLining','PVCLining',]
 groller_dia=['99','124']
 eroller_dia=['95','121']
@@ -25,7 +25,7 @@ pillow_spec=['UCP204FC','UCP205FC','UCP206FC','UCP207FC','UCP208FC',
 
 
 #ゴムライニング             キャリヤ　　　　　　　リターン
-#ベルト幅Bローラ径D　軸径d　軸長L　ローラ長l　軸長L　ローラ長l
+#ベルト幅B　　ローラ径D　軸径d　軸長L　ローラ長l　軸長L　ローラ長l
 groller_lst={
 '400':(   99,    19,   175, 145,    505, 460),
 '450':(   99,    19,   195, 165,    555, 510),
@@ -91,65 +91,66 @@ channel_lst={
 }
 
 #キャリヤ
-#ベルト幅B　M　  A0    N   B0   h    H    L0     kg
+#ベルト幅B　　　M　  A0    N   B0   h    H    L0
 Carrier_lst={
-'400':(   640, 690, 140,190, 125, 229, 469, 'L6x50',13),
-'450':(   690, 740, 140,190, 125, 236, 526, 'L6x50',14),
-'500':(   740, 790, 140,190, 125, 241, 569, 'L6x50',15),
-'600':(   840, 890, 150,200, 140, 266, 656, 'L6x65',18),
-'700':(   940, 990, 150,200, 140, 280, 771, 'L6x65',20),
-'750':(  1040,1090, 160,210, 150, 305, 806, 'L6x75',25),
-'800':(  1090,1140, 160,210, 150, 310, 849, 'L6x75',26),
-'900':(  1190,1240, 160,210, 150, 322, 949, 'L6x75',28),
-'1000':( 1290,1340, 160,210, 150, 332,1036, 'L6x75',30),
+'400':(   640, 690, 140,190, 125, 229, 469, 'L6x50'),
+'450':(   690, 740, 140,190, 125, 236, 526, 'L6x50'),
+'500':(   740, 790, 140,190, 125, 241, 569, 'L6x50'),
+'600':(   840, 890, 150,200, 140, 266, 656, 'L6x65'),
+'700':(   940, 990, 150,200, 140, 280, 771, 'L6x65'),
+'750':(  1040,1090, 160,210, 150, 305, 806, 'L6x75'),
+'800':(  1090,1140, 160,210, 150, 310, 849, 'L6x75'),
+'900':(  1190,1240, 160,210, 150, 322, 949, 'L6x75'),
+'1000':( 1290,1340, 160,210, 150, 332,1036, 'L6x75'),
 }
 
 #自動調心キャリヤ
-#ベルト幅B　M　  A0   N   B0   h    H    L0                 kg
+#ベルト幅B　　　M　  A0    N   B0   h    H    L0
 J_Carrier_lst={
-'400':(   640, 690, 140,190, 130, 232, 471, 'L6x50','C100x50x5',23),
-'450':(   690, 740, 140,190, 130, 239, 528, 'L6x50','C100x50x5',25),
-'500':(   740, 790, 140,190, 130, 244, 571, 'L6x50','C100x50x5',27),
-'600':(   840, 890, 150,200, 145, 269, 658, 'L6x65','C100x50x5',31),
-'700':(   940, 990, 150,200, 145, 283, 773, 'L6x65','C100x50x5',34),
-'750':(  1040,1090, 160,210, 155, 310, 807, 'L6x75','C125x65x6',44),
-'800':(  1090,1140, 160,210, 155, 315, 851, 'L6x75','C125x65x6',46),
-'900':(  1190,1240, 160,210, 155, 327, 951, 'L6x75','C125x65x6',49),
-'1000':( 1290,1340, 160,210, 155, 337,1038, 'L6x75','C125x65x6',52),
+'400':(   640, 690, 140,190, 130, 232, 471, 'L6x50','C100x50x5'),
+'450':(   690, 740, 140,190, 130, 239, 528, 'L6x50','C100x50x5'),
+'500':(   740, 790, 140,190, 130, 244, 571, 'L6x50','C100x50x5'),
+'600':(   840, 890, 150,200, 145, 269, 658, 'L6x65','C100x50x5'),
+'700':(   940, 990, 150,200, 145, 283, 773, 'L6x65','C100x50x5'),
+'750':(  1040,1090, 160,210, 155, 310, 807, 'L6x75','C125x65x6'),
+'800':(  1090,1140, 160,210, 155, 315, 851, 'L6x75','C125x65x6'),
+'900':(  1190,1240, 160,210, 155, 327, 951, 'L6x75','C125x65x6'),
+'1000':( 1290,1340, 160,210, 155, 337,1038, 'L6x75','C125x65x6'),
 }
 
 #リターン
-#ベルト幅B　l　   S     M     A0    N    B0    h  kg
+#ベルト幅B　l　   S     M     A0    N    B0    h
 Return_lst={
-'400':(   460,  480,  640,  690,  60,  110,  110,6),
-'450':(   510,  530,  690,  740,  60,  110,  110,7),
-'500':(   560,  580,  740,  790,  60,  110,  110,7),
-'600':(   660,  680,  840,  890,  60,  110,  110,8),
-'700':(   760,  780,  940,  990,  60,  110,  110,9),
-'750':(   850,  880, 1040, 1090,  60,  110,  110,13),
-'800':(   900,  930, 1090, 1140,  60,  110,  110,13),
-'900':(  1000, 1030, 1190, 1240,  60,  110,  110,15),
-'1000':( 1100, 1130, 1290, 1340,  60,  110,  110,16),
+'400':(   460,  480,  640,  690,  60,  110,  110),
+'450':(   510,  530,  690,  740,  60,  110,  110),
+'500':(   560,  580,  740,  790,  60,  110,  110),
+'600':(   660,  680,  840,  890,  60,  110,  110),
+'700':(   760,  780,  940,  990,  60,  110,  110),
+'750':(   850,  880, 1040, 1090,  60,  110,  110),
+'800':(   900,  930, 1090, 1140,  60,  110,  110),
+'900':(  1000, 1030, 1190, 1240,  60,  110,  110),
+'1000':( 1100, 1130, 1290, 1340,  60,  110,  110),
 }
 
 #自動調心リターン
-#ベルト幅B　l　    M     A0    N    B0    h　 　H                        kg
+#ベルト幅B　l　    M     A0    N    B0    h　 　H
 J_Return_lst={
-'400':(   460,   640,  690,  60,  110,  110, 295,  'L6x50',  'C100x50x5',20),
-'450':(   510,   690,  740,  60,  110,  110, 295,  'L6x50',  'C100x50x5',21),
-'500':(   560,   740,  790,  60,  110,  110, 295,  'L6x50',  'C100x50x5',24),
-'600':(   660,   840,  890,  60,  110,  110, 310,  'L6x65',  'C100x50x5',28),
-'700':(   760,   940,  990,  60,  110,  110, 310,  'L6x65',  'C100x50x5',30),
-'750':(   850,  1040, 1090,  60,  130,  125, 320,  'L6x50',  'C125x65x6',41),
-'800':(   900,  1090, 1140,  60,  130,  110, 345,  'L6x75',  'C125x65x6',42),
-'900':(  1000,  1190, 1240,  60,  130,  110, 345,  'L6x75',  'C125x65x6',46),
-'1000':( 1100,  1290, 1340,  60,  130,  110, 345,  'L6x75',  'C125x65x6',49),
+'400':(   460,   640,  690,  60,  110,  110, 295,  'L6x50',  'C100x50x5'),
+'450':(   510,   690,  740,  60,  110,  110, 295,  'L6x50',  'C100x50x5'),
+'500':(   560,   740,  790,  60,  110,  110, 295,  'L6x50',  'C100x50x5'),
+'600':(   660,   840,  890,  60,  110,  110, 310,  'L6x65',  'C100x50x5'),
+'700':(   760,   940,  990,  60,  110,  110, 310,  'L6x65',  'C100x50x5'),
+'750':(   850,  1040, 1090,  60,  130,  125, 320,  'L6x50',  'C125x65x6'),
+'800':(   900,  1090, 1140,  60,  130,  110, 345,  'L6x75',  'C125x65x6'),
+'900':(  1000,  1190, 1240,  60,  130,  110, 345,  'L6x75',  'C125x65x6'),
+'1000':( 1100,  1290, 1340,  60,  130,  110, 345,  'L6x75',  'C125x65x6'),
 }
+
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(355, 275)
+        Dialog.resize(355, 150)
         Dialog.move(1000, 0)
          #ベルト幅BeltWidh
         self.label = QtGui.QLabel(Dialog)
@@ -190,31 +191,6 @@ class Ui_Dialog(object):
         self.pushButton.setGeometry(QtCore.QRect(240, 120, 75, 23))
         self.pushButton.setObjectName("pushButton")
 
-        #質量計算
-        self.pushButton_m = QtGui.QPushButton('massCulculation',Dialog)
-        self.pushButton_m.setGeometry(QtCore.QRect(80, 170, 100, 23))
-        self.pushButton_m.setObjectName("pushButton") 
-        #質量集計
-        self.pushButton_m20 = QtGui.QPushButton('massTally_csv',Dialog)
-        self.pushButton_m20.setGeometry(QtCore.QRect(180, 170, 150, 23))
-        self.pushButton_m2 = QtGui.QPushButton('massTally_SpreadSheet',Dialog)
-        self.pushButton_m2.setGeometry(QtCore.QRect(180, 195, 150, 23))
-        #質量入力
-        self.pushButton_m3 = QtGui.QPushButton('massImput[kg]',Dialog)
-        self.pushButton_m3.setGeometry(QtCore.QRect(80, 220, 100, 23))
-        self.pushButton_m3.setObjectName("pushButton")  
-        self.le_mass = QtGui.QLineEdit(Dialog)
-        self.le_mass.setGeometry(QtCore.QRect(180, 220, 50, 20))
-        self.le_mass.setAlignment(QtCore.Qt.AlignCenter)  
-        self.le_mass.setText('10.0')
-        #密度
-        self.lbl_gr = QtGui.QLabel('SpecificGravity',Dialog)
-        self.lbl_gr.setGeometry(QtCore.QRect(80, 245, 80, 12))
-        self.le_gr = QtGui.QLineEdit(Dialog)
-        self.le_gr.setGeometry(QtCore.QRect(180, 245, 50, 20))
-        self.le_gr.setAlignment(QtCore.Qt.AlignCenter)  
-        self.le_gr.setText('7.85')
-
         self.comboBox.addItems(belt_haba)
         self.comboBox_2.addItems(belt_buhin)
 
@@ -225,10 +201,6 @@ class Ui_Dialog(object):
         self.comboBox_3.currentIndexChanged[int].connect(self.onSpec2)
 
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
-        QtCore.QObject.connect(self.pushButton_m, QtCore.SIGNAL("pressed()"), self.massCulc)
-        QtCore.QObject.connect(self.pushButton_m2, QtCore.SIGNAL("pressed()"), self.massTally)
-        QtCore.QObject.connect(self.pushButton_m20, QtCore.SIGNAL("pressed()"), self.massTally2)
-        QtCore.QObject.connect(self.pushButton_m3, QtCore.SIGNAL("pressed()"), self.massImput)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -240,95 +212,6 @@ class Ui_Dialog(object):
         self.label_3.setText(QtGui.QApplication.translate("Dialog", "Spec", None))
         self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Execution", None))
         self.label_6.setText(QtGui.QApplication.translate("Dialog", "Spec2", None))
-
-    def massImput(self):
-         # 選択したオブジェクトを取得する
-        c00 = Gui.Selection.getSelection()
-        if c00:
-            obj = c00[0]
-        label='mass[kg]'
-        g=float(self.le_mass.text())
-        try:
-            obj.addProperty("App::PropertyFloat", "mass",label)
-            obj.mass=g
-        except:
-            obj.mass=g
-         
-    def massCulc(self):
-        obj = Gui.Selection.getSelection()[0]
-        #if c00:
-        #    obj = c00[0]
-        label='mass[kg]'
-        g0=float(self.le_gr.text())
-        g=obj.Shape.Volume*g0*1000/10**9  
-        try:
-            obj.addProperty("App::PropertyFloat", "mass",label)
-            obj.mass=g
-        except:
-            obj.mass=g
-            pass
-        App.ActiveDocument.recompute()
-    def massTally2(self):#csv
-        doc = App.ActiveDocument
-        objects = doc.Objects
-        mass_list = []
-        for obj in objects:
-            if Gui.ActiveDocument.getObject(obj.Name).Visibility:
-                if obj.isDerivedFrom("Part::Feature"):
-                    if hasattr(obj, "mass"):
-                        try:
-                            mass_list.append([obj.Label, obj.dia,'1', obj.mass])
-                        except:
-                            mass_list.append([obj.Label, '','1', obj.mass])    
-
-                else:
-                     pass
-        doc_path = doc.FileName
-        csv_filename = os.path.splitext(os.path.basename(doc_path))[0] + "_counts_and_masses.csv"
-        csv_path = os.path.join(os.path.dirname(doc_path), csv_filename)
-        with open(csv_path, 'w', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow(["Name",'Standard','Count', "Mass[kg]"])
-            writer.writerows(mass_list) 
-    def massTally(self):#spreadsheet
-        doc = App.ActiveDocument
-        # 新しいスプレッドシートを作成
-        spreadsheet = doc.addObject("Spreadsheet::Sheet", "PartList")
-        spreadsheet.Label = "Parts List"
-        
-        # ヘッダー行を記入
-        headers = ['No',"Name",'Standard', 'Count','Mass[kg]']
-        for header in enumerate(headers):
-            spreadsheet.set(f"A{1}", headers[0])
-            spreadsheet.set(f"B{1}", headers[1])
-            spreadsheet.set(f"C{1}", headers[2])
-            spreadsheet.set(f"D{1}", headers[3])
-            spreadsheet.set(f"E{1}", headers[4])
-        # パーツを列挙して情報を書き込む
-        row = 2
-        i=1
-        s=0
-        for i,obj in enumerate(doc.Objects):
-            try:
-                spreadsheet.set(f"E{row}", f"{obj.mass:.2f}")  # mass
-                s=obj.mass+s
-                if hasattr(obj, "Shape") and obj.Shape.Volume > 0:
-                    try:
-                        spreadsheet.set(f"A{row}", str(row-1))  # No
-                        spreadsheet.set(f"B{row}", obj.Label) 
-                        try:
-                            spreadsheet.set(f"C{row}", obj.dia)
-                        except:
-                            pass
-                        spreadsheet.set(f"D{row}", '1')   # count
-                        row += 1
-                    except:
-                        pass    
-            except:
-                pass
-            spreadsheet.set(f'E{row}',s)
-        App.ActiveDocument.recompute()
-        Gui.activeDocument().activeView().viewAxometric()    
 
     def onSpec(self):
         global buhin
@@ -383,6 +266,7 @@ class Ui_Dialog(object):
             self.comboBox.show()
             self.comboBox_2.show()
             self.comboBox_3.show()
+            #self.comboBox_4.show()
             pic=buhin+'.png'   
             tb=takeup_dia
         elif buhin=='PillowBlock': 
@@ -392,16 +276,32 @@ class Ui_Dialog(object):
             pic=buhin+'.png'   
             tb=pillow_spec 
         elif buhin=='Assy':  
-            
             self.comboBox.hide() 
             self.comboBox_3.hide()  
             self.comboBox_4.hide()  
             pic='Belt_Assy.png'
+            #print(buhin)
+            #self.comboBox_3.clear()
+        elif buhin=='Frame':  
+            self.comboBox.hide() 
+            self.comboBox_3.hide()  
+            self.comboBox_4.hide()  
+            pic='Frame2.png'
+            #print(buhin)
+            #self.comboBox_3.clear()    
         elif buhin=='Belt':  
             self.comboBox.hide() 
             self.comboBox_3.hide()  
             self.comboBox_4.hide()   
             pic='Belt.png'
+        elif buhin=='V-shaped scraper':  
+            self.comboBox.clear()
+            self.comboBox.addItems(Vscraper_haba)
+            self.comboBox.show() 
+            self.comboBox_3.hide()  
+            self.comboBox_4.hide()   
+            pic='scraper.png'    
+
         elif buhin=='Take-UpAssy':
             self.comboBox.hide() 
             self.comboBox_3.hide()  
@@ -424,22 +324,23 @@ class Ui_Dialog(object):
             pic=buhin +'_' + spec + '.png'
         elif buhin=='Return':
             pic=buhin +'_' + spec + '.png'
+        #else:
+        #    pic=buhin  + '.png'
+        #print(buhin)
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, "Belt_data",'png_data',pic)
         self.label_5.setPixmap(QtGui.QPixmap(joined_path))
 
     def onSpec2(self):#部品
         spec2=self.comboBox_3.currentText()
-        #print(buhin)
-        #print(spec2)
-
         if buhin=='Carrier':
             pic=buhin +'_'  + spec2 + '.png'
         elif buhin=='Return':
             pic=buhin+'_'  + spec2 + '.png'
+        elif buhin=='Frame':
+            pic='Frame2.png'
         else:
             pic=buhin + '.png'
-        #print(pic)    
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, "Belt_data",'png_data',pic)
         self.label_5.setPixmap(QtGui.QPixmap(joined_path))
@@ -1051,7 +952,6 @@ class Ui_Dialog(object):
                 B0=sa[3]
                 h=sa[4]
                 katakou=sa[7]
-                g=sa[8]
                 sa1=angle_lst[katakou]
                 angle(self)
                 c01=c00
@@ -1136,7 +1036,6 @@ class Ui_Dialog(object):
                 h=sa[4]
                 katakou=sa[7]
                 katakou2=sa[8]
-                g=sa[9]
                 sa1=angle_lst[katakou]
                 A=sa1[0]
                 t=sa1[2]
@@ -1316,7 +1215,6 @@ class Ui_Dialog(object):
                 sa=Return_lst[B]
                 #A0=sa[3]
                 B0=sa[5]
-                g=sa[7]
                 c01.Placement=App.Placement(App.Vector(S/2,-B0/2,-15),App.Rotation(App.Vector(0,0,1),0))
                 s_3(self)
                 c02=c00
@@ -1340,7 +1238,6 @@ class Ui_Dialog(object):
                 H=sa[6]
                 katakou=sa[7]
                 katakou2=sa[8]
-                g=sa[9]
                 sa1=angle_lst[katakou]
                 A=float(sa1[0])
                 angle(self)
@@ -1447,11 +1344,9 @@ class Ui_Dialog(object):
                 if buhin=='Take-UP':
                     fname=buhin+'_'+self.comboBox_3.currentText()+'.FCStd'
                     joined_path = os.path.join(base, 'Belt_data','takeup_data',fname) 
-
                 elif buhin=='PillowBlock':
                     fname=self.comboBox_3.currentText()+'.FCStd'
                     joined_path = os.path.join(base, 'Belt_data','brg_data',fname) 
-
                 try:
                     Gui.ActiveDocument.mergeProject(joined_path)
                 except:
@@ -1462,28 +1357,37 @@ class Ui_Dialog(object):
                 return  
         elif buhin=='Assy':
             import Belt_Assy
-            return
+        elif buhin=='Frame':
+            import Frame  
         elif buhin=='Belt':
             import Belt  
-            return
+        elif self.comboBox_2.currentText()=='V-shaped scraper' :
+             dPath='Vscraper'
+             fname='scraper_'+self.comboBox.currentText()+'B.FCStd'    
+             #dPath2=self.comboBox_B.currentText()+'B'       
+             base=os.path.dirname(os.path.abspath(__file__))
+             joined_path = os.path.join(base, 'Belt_data',dPath,fname) 
+             print(joined_path)
+             try:
+                Gui.ActiveDocument.mergeProject(joined_path)
+             except:
+                doc=App.newDocument()
+                Gui.ActiveDocument.mergeProject(joined_path)
+             Gui.SendMsgToActiveView("ViewFit")   
+
         elif buhin=='Take-UpAssy':
-            import TakeUp  
-            return   
+            import TakeUp     
 
         label= buhinmei
         doc=App.activeDocument()
-
         try:
-            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-            obj.addProperty("App::PropertyFloat", "mass",'mass[kg]')
-            obj.mass=g
-            obj.ViewObject.Proxy=0
-        except:
-            obj.mass=g
-            obj.ViewObject.Proxy=0
-            pass   
+            F_Obj = doc.addObject("Part::Feature",label)
 
-        obj.Shape=c1
+        except:
+            doc=App.newDocument()
+            F_Obj = doc.addObject("Part::Feature",label)
+            pass    
+        F_Obj.Shape=c1
         Gui.SendMsgToActiveView("ViewFit")
      
 class main():

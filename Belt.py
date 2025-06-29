@@ -73,11 +73,8 @@ class Ui_Dialog(object):
         self.le_C.setText('5000')
 
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
-        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
-        #QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.massCulc)
-        #QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.massCulc)
         self.retranslateUi(Dialog)
-        
+        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "3ローラートラフ型ベルト", None))
@@ -130,59 +127,27 @@ class Ui_Dialog(object):
                      spreadsheet.set('B9',str(sa[5]))#d2
                      spreadsheet.set('B10',str(sa[6]))#Ls
                      spreadsheet.set('B11',str(sa[7]))#h0
-
                      
+
                      App.ActiveDocument.recompute()
 
-                     print(Belt.Shape.Volume)
-                     g=Belt.Shape.Volume*g0*1000/10**9  
-                     Belt.mass=g
-
-
     def create(self): 
-         global Belt
-         global g0
+        
          fname='Belt0.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base,'Belt_data',fname) 
          try:
-            doc = App.ActiveDocument
             Gui.ActiveDocument.mergeProject(joined_path)
          except:
             doc=App.newDocument()
             Gui.ActiveDocument.mergeProject(joined_path)
-
-         App.ActiveDocument.recompute()    
-
-         objects=doc.Objects
-         for obj in objects:
-             if obj.Label[:4]=='Belt':
-                 Belt=obj
-             
-             
-         label='mass[kg]'
-         g0=1.0
-         g=Belt.Shape.Volume*g0*1000/10**9  
-         print(Belt.Shape.Volume)
-         try:
-             Belt.addProperty("App::PropertyFloat", "mass",label)
-             Belt.mass=g
-         except:
-             Belt.mass=g
-             pass
          Gui.SendMsgToActiveView("ViewFit")   
-    
          
 class main():
         d = QtGui.QWidget()
         d.ui = Ui_Dialog()
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
-        d.show() 
-        # スクリプトのウィンドウを取得
-        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
-        # 閉じるボタンを無効にする
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
-     
-
+        d.show()  
+        
         
