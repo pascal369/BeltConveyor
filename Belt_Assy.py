@@ -8,10 +8,12 @@ import Sketcher
 import PartDesign
 import FreeCAD as App
 import FreeCADGui as Gui
-
+import csv
 from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
+import FreeCAD
+
 type_data=['MotorPulley',]
 BeltW=['500','600','750',]
 #       B0     b1     b2     t0    D0    d1   d2    Ls    h0
@@ -26,18 +28,11 @@ BDim={
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(280, 400)
+        Dialog.resize(280, 510)
         Dialog.move(1000, 0)
-        #図形
-        self.label_6 = QtGui.QLabel(Dialog)
-        self.label_6.setGeometry(QtCore.QRect(35, 170, 200, 200))
-        self.label_6.setText("")
         
-        base=os.path.dirname(os.path.abspath(__file__))
-        joined_path = os.path.join(base, 'Belt_data','png_data',"Belt_Assy.png")
-        self.label_6.setPixmap(QtGui.QPixmap(joined_path))
-        self.label_6.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_6.setObjectName("label_6")
+        
+        
         #タイプ
         self.label_type = QtGui.QLabel('Type',Dialog)
         self.label_type.setGeometry(QtCore.QRect(30, 13, 100, 22))
@@ -79,34 +74,252 @@ class Ui_Dialog(object):
         #Import
         self.pushButton3 = QtGui.QPushButton('Import',Dialog)
         self.pushButton3.setGeometry(QtCore.QRect(170, 143, 60, 22))
+
+        #図形
+        self.label_6 = QtGui.QLabel(Dialog)
+        self.label_6.setGeometry(QtCore.QRect(35, 170, 200, 200))
+        self.label_6.setText("")
+        base=os.path.dirname(os.path.abspath(__file__))
+        joined_path = os.path.join(base, 'Belt_data','png_data',"Belt_Assy.png")
+        self.label_6.setPixmap(QtGui.QPixmap(joined_path))
+        self.label_6.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_6.setObjectName("label_6")
+
+        #質量計算
+        self.pushButton_m = QtGui.QPushButton('massCulculation',Dialog)
+        self.pushButton_m.setGeometry(QtCore.QRect(30, 380, 100, 23))
+        self.pushButton_m.setObjectName("pushButton")  
+        
+        #質量集計_spreadsheet
+        self.pushButton_m2 = QtGui.QPushButton('massTally_spreadsheet',Dialog)
+        self.pushButton_m2.setGeometry(QtCore.QRect(130, 380, 120, 23))
+        self.pushButton_m2.setObjectName("pushButton")
+        #質量集計_csv
+        self.pushButton_m20 = QtGui.QPushButton('massTally_csv',Dialog)
+        self.pushButton_m20.setGeometry(QtCore.QRect(130, 405, 120, 23))
+        self.pushButton_m20.setObjectName("pushButton") 
+        #質量入力
+        self.pushButton_m3 = QtGui.QPushButton('massImput[kg]',Dialog)
+        self.pushButton_m3.setGeometry(QtCore.QRect(30, 430, 100, 23))
+        self.pushButton_m3.setObjectName("pushButton")  
+        self.le_mass = QtGui.QLineEdit(Dialog)
+        self.le_mass.setGeometry(QtCore.QRect(130, 430, 50, 20))
+        self.le_mass.setAlignment(QtCore.Qt.AlignCenter)  
+        self.le_mass.setText('10.0')
+        #密度
+        self.lbl_gr = QtGui.QLabel('SpecificGravity',Dialog)
+        self.lbl_gr.setGeometry(QtCore.QRect(30, 455, 80, 12))
+        self.le_gr = QtGui.QLineEdit(Dialog)
+        self.le_gr.setGeometry(QtCore.QRect(130, 455, 50, 20))
+        self.le_gr.setAlignment(QtCore.Qt.AlignCenter)  
+        self.le_gr.setText('7.85')
+
         self.comboBox_B.addItems(BeltW)
         self.comboBox_type.addItems(type_data)
         self.le_C.setText('5000')
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setParts)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
-        QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
+        for i in range(2):
+            QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
+
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
+        QtCore.QObject.connect(self.pushButton_m, QtCore.SIGNAL("pressed()"), self.massCulc)
+        QtCore.QObject.connect(self.pushButton_m2, QtCore.SIGNAL("pressed()"), self.massTally)
+        QtCore.QObject.connect(self.pushButton_m20, QtCore.SIGNAL("pressed()"), self.massTally2)
+        QtCore.QObject.connect(self.pushButton_m3, QtCore.SIGNAL("pressed()"), self.massImput)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "BeltCvAssyr", None))
+        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "BeltCvAssy", None))
         
-    def setParts(self):
-        global spreadsheet
-        selection = Gui.Selection.getSelection()
-        if selection:
-             selected_object = selection[0]
-             if selected_object.TypeId == "App::Part":
-                 parts_group = selected_object
-                 for obj in parts_group.Group:
-                     #print(obj.Label)
-                     if obj.TypeId == "Spreadsheet::Sheet":
-                         spreadsheet = obj
+    def massImput(self):
+         # 選択したオブジェクトを取得する
+        c00 = Gui.Selection.getSelection()
+        if c00:
+            obj = c00[0]
+        label='mass[kg]'
+        g=float(self.le_mass.text())
+        try:
+            obj.addProperty("App::PropertyFloat", "mass",label)
+            obj.mass=g
+        except:
+            obj.mass=g
 
-        self.comboBox_B.setCurrentText(spreadsheet.getContents('F2'))     
-        self.le_C.setText(spreadsheet.getContents('C0'))  
-        self.le_h.setText(spreadsheet.getContents('Ht'))  
-        self.le_k.setText(spreadsheet.getContents('k'))        
+    def massCulc(self):
+        # 選択したオブジェクトを取得する
+        c00 = Gui.Selection.getSelection()
+        if c00:
+            obj = c00[0]
+        label='mass[kg]'
+        g0=float(self.le_gr.text())
+        g=obj.Shape.Volume*g0*1000/10**9  
+        try:
+            obj.addProperty("App::PropertyFloat", "mass",label)
+            obj.mass=g
+        except:
+            obj.mass=g
+            pass
+
+    def massTally2(self):#csv
+        doc = App.ActiveDocument
+        objects = doc.Objects
+        mass_list = []
+        s=0
+        for j,obj in enumerate(doc.Objects):
+            if obj.Label=='本体' or obj.Label=='本体 (mirrored)' or obj.Label[:7]=='Channel' or obj.Label[:5]=='Angle' \
+                or obj.Label[:6]=='Square' or obj.Label[:7]=='Extrude' or obj.Label[:6]=='Fusion' or obj.Label[:6]=='Corner' \
+                    or obj.Label[:5]=='basic' or obj.Label[:4]=='Edge' or obj.Label[:3]=='hub' or obj.Label[:7]=='_8_tube'\
+                        or obj.Label[:5]=='plate' or obj.Label[:6]=='keyway' or obj.Label[:4]=='tube' or obj.Label[:5]=='color'\
+                            or obj.Label[:6]=='HShape':
+                pass 
+            else:
+                
+                if hasattr(obj, "mass") and obj.mass > 0:
+                    s=obj.mass+s
+                    if obj.Label[:6]=='Return':
+                        n=returnArray.Count
+                    elif obj.Label[:7]=='Carrier':
+                        n=carrierArray.Count    
+                    else:
+                        n=1
+                    mass_list.append([obj.Label, '',n, obj.mass,round(obj.mass*n,2)])    
+
+        mass_list.append(['','', '','', s])    
+               
+        doc_path = doc.FileName
+        csv_filename = os.path.splitext(os.path.basename(doc_path))[0] + "_counts_and_masses.csv"
+        csv_path = os.path.join(os.path.dirname(doc_path), csv_filename)
+        try:
+            with open(csv_path, 'w', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow(["Name",'Standard','Count','Unit[kg]', "Mass[kg]"])
+                writer.writerows(mass_list) 
+        except:
+            print('csvファイルを削除してください。')    
+            return    
+
+    def massTally(self):#spreadsheet
+        doc = App.ActiveDocument
+        # 新しいスプレッドシートを作成
+        spreadsheet = doc.addObject("Spreadsheet::Sheet", "Parts_List")
+        spreadsheet.Label = "Parts_List"
+        # ヘッダー行を記入
+        headers = ['No',"Name",'Standard', 'Count','Unit[kg]','Mass[kg]']
+        for header in enumerate(headers):
+            spreadsheet.set(f"A{1}", headers[0])
+            spreadsheet.set(f"B{1}", headers[1])
+            spreadsheet.set(f"C{1}", headers[2])
+            spreadsheet.set(f"D{1}", headers[3])
+            spreadsheet.set(f"E{1}", headers[4])
+            spreadsheet.set(f"F{1}", headers[5])
+        # パーツを列挙して情報を書き込む
+        row = 2
+        i=1
+        s=0
+        for i,obj in enumerate(doc.Objects):
+            if obj.Label=='本体' or obj.Label=='本体 (mirrored)' or obj.Label[:7]=='Channel' or obj.Label[:5]=='Angle' \
+                or obj.Label[:6]=='Square' or obj.Label[:7]=='Extrude' or obj.Label[:6]=='Fusion' or obj.Label[:6]=='Corner' \
+                    or obj.Label[:5]=='basic' or obj.Label[:4]=='Edge' or obj.Label[:3]=='hub' or obj.Label[:7]=='_8_tube'\
+                        or obj.Label[:5]=='plate' or obj.Label[:6]=='keyway' or obj.Label[:4]=='tube' or obj.Label[:5]=='color'\
+                            or obj.Label[:6]=='HShape':
+                pass        
+            else:  
+                try:
+                    spreadsheet.set(f"E{row}", f"{obj.mass:.2f}")  # Unit
+                    s=obj.mass+s
+                    if hasattr(obj, "Shape") and obj.Shape.Volume > 0:
+                        try:
+                            spreadsheet.set(f"A{row}", str(row-1))  # No
+                            spreadsheet.set(f"B{row}", obj.Label)   #Name
+                            try:
+                                spreadsheet.set(f"C{row}", obj.dia)
+                            except:
+                                pass
+                            if obj.Label[:6]=='Return':
+                                n=returnArray.Count
+                            elif obj.Label[:7]=='Carrier':
+                                n=carrierArray.Count    
+                            else:
+                                n=1    
+                            spreadsheet.set(f"D{row}", str(n))   # count
+                            g=round(obj.mass*n,2)
+                            spreadsheet.set(f"F{row}", str(g))   # g
+                            row += 1
+                        except:
+                            print('error')
+                            pass    
+                except:
+                    pass
+                spreadsheet.set(f'F{row}',str(s))
+        App.ActiveDocument.recompute()
+        Gui.activeDocument().activeView().viewAxometric()      
+
+    def setParts(self):
+        global shtBeltCvAssy
+        global takeUpAssy
+        global bendPully
+        global Skirt
+        global Cover
+        global waterReceptacle
+        global Belt
+        global Carrier
+        global Return
+        global Scraper
+        global Frame
+        global Post
+        global returnArray
+        global carrierArray
+        global CPM
+        global Self_Aligning_Carrier
+        global Self_Aligning_Return
+        global Parts_List
+        doc = FreeCAD.activeDocument()
+        if doc:
+             group_names = []
+             for obj in doc.Objects:
+                 if obj.Label[:13] == "shtBeltCvAssy":
+                     shtBeltCvAssy = obj
+                 elif obj.Label[:10]=='takeUpAssy':
+                     takeUpAssy=obj 
+                 elif obj.Label=='bendPully':
+                     bendPully=obj  
+                 elif obj.Label[:5]=='Skirt':
+                     Skirt=obj   
+                 elif obj.Label[:5]=='Cover':
+                     Cover=obj 
+                 elif obj.Label[:15]=='waterReceptacle':
+                     waterReceptacle=obj     
+                 elif obj.Label[:4]=='Belt':
+                     Belt=obj 
+                 elif obj.Label[:7]=='Carrier':
+                     Carrier=obj     
+                 elif obj.Label[:6]=='Return':
+                     Return=obj  
+                 elif obj.Label[:7]=='Scraper':
+                     Scraper=obj      
+                 elif obj.Label[:5]=='Frame':
+                     Frame=obj  
+                 elif obj.Label[:4]=='Post':
+                     Post=obj  
+                 elif obj.Label=='returnArray':
+                     returnArray=obj   
+                 elif obj.Label=='carrierArray':
+                     carrierArray=obj    
+                 elif obj.Label[:3] =='CPM':
+                     CPM=obj
+                 elif obj.Label[:21] =='Self_Aligning_Carrier':
+                     Self_Aligning_Carrier=obj   
+                 elif obj.Label[:20] =='Self_Aligning_Return':
+                     Self_Aligning_Return=obj   
+                 elif obj.Label=='Parts_List':
+                     #print('aaaaaaaaaaaaaaaaaaaaaaa')
+                     Parts_List=obj    
+
+                 print(obj.Label)
+                 self.comboBox_B.setCurrentText(shtBeltCvAssy.getContents('F2'))     
+                 self.le_C.setText(shtBeltCvAssy.getContents('B2'))  
+                 self.le_h.setText(shtBeltCvAssy.getContents('Ht'))
+                 self.le_k.setText(shtBeltCvAssy.getContents('k'))        
 
     def update(self):
         try:
@@ -115,29 +328,87 @@ class Ui_Dialog(object):
             L=self.le_C.text()
             Ht=self.le_h.text()
             k=self.le_k.text()
-            spreadsheet.set('C0',L)
-            spreadsheet.set('B0',key)
-            spreadsheet.set('b1',str(sa[0]))#b1
-            spreadsheet.set('b2',str(sa[1]))#b2
-            spreadsheet.set('t0',str(sa[2]))#t0
-            spreadsheet.set('D0',str(sa[3]))#D0  
-            spreadsheet.set('d1',str(sa[4]))#d1 
-            spreadsheet.set('d2',str(sa[5]))#d2
-            spreadsheet.set('Ls',str(sa[6]))#Ls
-            spreadsheet.set('h0',str(sa[7]))#h0
-            spreadsheet.set('Ht',Ht)#Ht
-            spreadsheet.set('k',k)#k
-            C0=spreadsheet.getContents('C0') 
+            shtBeltCvAssy.set('B2',L)
+            shtBeltCvAssy.set('B0',key)
+            shtBeltCvAssy.set('b1',str(sa[0]))#b1
+            shtBeltCvAssy.set('b2',str(sa[1]))#b2
+            shtBeltCvAssy.set('t0',str(sa[2]))#t0
+            shtBeltCvAssy.set('D0',str(sa[3]))#D0  
+            shtBeltCvAssy.set('d1',str(sa[4]))#d1 
+            shtBeltCvAssy.set('d2',str(sa[5]))#d2
+            shtBeltCvAssy.set('Ls',str(sa[6]))#Ls
+            shtBeltCvAssy.set('h0',str(sa[7]))#h0
+            shtBeltCvAssy.set('Ht',Ht)#Ht
+            shtBeltCvAssy.set('k',k)#k
+            C0=shtBeltCvAssy.getContents('C0') 
             post_c=int((float(C0)-1300)/2500)
             post_x=(float(C0)-1300)/(post_c+1)
-            print(post_x,post_c,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-            spreadsheet.set('post_c',str(post_c))
-            spreadsheet.set('post_x',str(post_x))
+            shtBeltCvAssy.set('post_c',str(post_c))
+            shtBeltCvAssy.set('post_x',str(post_x))
+        
+            g0=7.85
+            g=round(takeUpAssy.Shape.Volume*g0*1000/10**9,2) 
+            takeUpAssy.mass=g
+            
+            
+            g0=7.85
+            g=round(bendPully.Shape.Volume*g0*1000/10**9,2) 
+            bendPully.mass=g
+            
+            g0=7.85
+            g=round(Skirt.Shape.Volume*g0*1000/10**9,2) 
+            Skirt.mass=g
+            
+            g0=7.85
+            g=round(Cover.Shape.Volume*g0*1000/10**9,2) 
+            Cover.mass=g
+            
+
+            g0=7.85
+            g=round(waterReceptacle.Shape.Volume*g0*1000/10**9,2) 
+            waterReceptacle.mass=g
+            
+            g0=7.85
+            g=round(Belt.Shape.Volume*g0*1000/10**9,2) 
+            Belt.mass=g
+            
+            g0=7.85
+            g=round(Carrier.Shape.Volume*g0*1000/10**9,2) 
+            Carrier.mass=g
+            
+            g0=7.85
+            g=round(Return.Shape.Volume*g0*1000/10**9,2) 
+            Return.mass=g
+            
+            g0=7.85
+            g=round(Scraper.Shape.Volume*g0*1000/10**9,2) 
+            Scraper.mass=g
+            
+            g0=7.85
+            g=round(Frame.Shape.Volume*g0*1000/10**9,2) 
+            Frame.mass=g
+            
+            g0=7.85
+            g=round(Post.Shape.Volume*g0*1000/10**9,2) 
+            Post.mass=g
+            
+            g0=7.85
+            g=round(CPM.Shape.Volume*g0*1000/10**9,2) 
+            CPM.mass=g
+            
+            g0=7.85
+            g=round(Self_Aligning_Carrier.Shape.Volume*g0*1000/10**9,2) 
+            Self_Aligning_Carrier.mass=g
+            #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+            g0=7.85
+            g=round(Self_Aligning_Return.Shape.Volume*g0*1000/10**9,2) 
+            Self_Aligning_Return.mass=g
+
+        
             App.ActiveDocument.recompute()
         except:
-         #print('aaaaaaaaaaaaaaaaaaaa')
-         
-         return    
+            print('error')
+            return    
     
     def create(self): 
          W0=self.comboBox_B.currentText()
@@ -152,7 +423,8 @@ class Ui_Dialog(object):
              fname='BeltCv'+W0+'BAssy_D.FCStd'    
          dPath2=self.comboBox_B.currentText()+'B'       
          base=os.path.dirname(os.path.abspath(__file__))
-         joined_path = os.path.join(base, 'Belt_data','assy_data',dPath,dPath2,fname) 
+         joined_path = os.path.join(base, 'assy_data',dPath,dPath2,fname) 
+         print(joined_path)
          try:
             Gui.ActiveDocument.mergeProject(joined_path)
          except:
