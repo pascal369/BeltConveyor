@@ -175,7 +175,7 @@ class Ui_Dialog(object):
             else:
                 
                 if hasattr(obj, "mass") and obj.mass > 0:
-                    s=obj.mass+s
+                    s=round(obj.mass+s,2)
                     if obj.Label[:6]=='Return':
                         n=returnArray.Count
                     elif obj.Label[:7]=='Carrier':
@@ -361,8 +361,7 @@ class Ui_Dialog(object):
             g0=7.85
             g=round(bendPully.Shape.Volume*g0*1000/10**9,2) 
             bendPully.mass=g
-            print('ccccccccccccccccccccccccccccccccccccc')
-            
+           
 
             g0=7.85
             g=round(Skirt.Shape.Volume*g0*1000/10**9,2) 
@@ -408,7 +407,7 @@ class Ui_Dialog(object):
             g0=7.85
             g=round(Self_Aligning_Carrier.Shape.Volume*g0*1000/10**9,2) 
             Self_Aligning_Carrier.mass=g
-            #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+            
             g0=7.85
             g=round(Self_Aligning_Return.Shape.Volume*g0*1000/10**9,2) 
             Self_Aligning_Return.mass=g
