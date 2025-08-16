@@ -322,12 +322,14 @@ class Ui_Dialog(object):
                  self.le_k.setText(shtBeltCvAssy.getContents('k'))        
 
     def update(self):
+        
         try:
             key=self.comboBox_B.currentText()
             sa=BDim[key]
             L=self.le_C.text()
             Ht=self.le_h.text()
             k=self.le_k.text()
+            
             shtBeltCvAssy.set('B2',L)
             shtBeltCvAssy.set('B0',key)
             shtBeltCvAssy.set('b1',str(sa[0]))#b1
@@ -340,12 +342,17 @@ class Ui_Dialog(object):
             shtBeltCvAssy.set('h0',str(sa[7]))#h0
             shtBeltCvAssy.set('Ht',Ht)#Ht
             shtBeltCvAssy.set('k',k)#k
+            
             C0=shtBeltCvAssy.getContents('C0') 
+            
             post_c=int((float(C0)-1300)/2500)
-            post_x=(float(C0)-1300)/(post_c+1)
+            
+            post_x=round((float(C0)-1300)/(post_c+1),2)
+            
             shtBeltCvAssy.set('post_c',str(post_c))
+            
             shtBeltCvAssy.set('post_x',str(post_x))
-        
+            
             g0=7.85
             g=round(takeUpAssy.Shape.Volume*g0*1000/10**9,2) 
             takeUpAssy.mass=g
@@ -354,7 +361,9 @@ class Ui_Dialog(object):
             g0=7.85
             g=round(bendPully.Shape.Volume*g0*1000/10**9,2) 
             bendPully.mass=g
+            print('ccccccccccccccccccccccccccccccccccccc')
             
+
             g0=7.85
             g=round(Skirt.Shape.Volume*g0*1000/10**9,2) 
             Skirt.mass=g
@@ -368,7 +377,7 @@ class Ui_Dialog(object):
             g=round(waterReceptacle.Shape.Volume*g0*1000/10**9,2) 
             waterReceptacle.mass=g
             
-            g0=7.85
+            g0=1.0
             g=round(Belt.Shape.Volume*g0*1000/10**9,2) 
             Belt.mass=g
             
