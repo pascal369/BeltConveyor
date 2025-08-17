@@ -31,8 +31,6 @@ class Ui_Dialog(object):
         Dialog.resize(280, 510)
         Dialog.move(1000, 0)
         
-        
-        
         #タイプ
         self.label_type = QtGui.QLabel('Type',Dialog)
         self.label_type.setGeometry(QtCore.QRect(30, 13, 100, 22))
@@ -94,10 +92,7 @@ class Ui_Dialog(object):
         self.pushButton_m2 = QtGui.QPushButton('massTally_spreadsheet',Dialog)
         self.pushButton_m2.setGeometry(QtCore.QRect(130, 380, 120, 23))
         self.pushButton_m2.setObjectName("pushButton")
-        #質量集計_csv
-        self.pushButton_m20 = QtGui.QPushButton('massTally_csv',Dialog)
-        self.pushButton_m20.setGeometry(QtCore.QRect(130, 405, 120, 23))
-        self.pushButton_m20.setObjectName("pushButton") 
+        
         #質量入力
         self.pushButton_m3 = QtGui.QPushButton('massImput[kg]',Dialog)
         self.pushButton_m3.setGeometry(QtCore.QRect(30, 430, 100, 23))
@@ -117,17 +112,18 @@ class Ui_Dialog(object):
         self.comboBox_B.addItems(BeltW)
         self.comboBox_type.addItems(type_data)
         self.le_C.setText('5000')
+        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setParts)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
         for i in range(2):
             QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
 
         self.retranslateUi(Dialog)
-        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
+        
         QtCore.QObject.connect(self.pushButton_m, QtCore.SIGNAL("pressed()"), self.massCulc)
         QtCore.QObject.connect(self.pushButton_m2, QtCore.SIGNAL("pressed()"), self.massTally)
-        QtCore.QObject.connect(self.pushButton_m20, QtCore.SIGNAL("pressed()"), self.massTally2)
         QtCore.QObject.connect(self.pushButton_m3, QtCore.SIGNAL("pressed()"), self.massImput)
+        
         QtCore.QMetaObject.connectSlotsByName(Dialog)
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "BeltCvAssy", None))
@@ -160,44 +156,6 @@ class Ui_Dialog(object):
             obj.mass=g
             pass
 
-    def massTally2(self):#csv
-        doc = App.ActiveDocument
-        objects = doc.Objects
-        mass_list = []
-        s=0
-        for j,obj in enumerate(doc.Objects):
-            if obj.Label=='本体' or obj.Label=='本体 (mirrored)' or obj.Label[:7]=='Channel' or obj.Label[:5]=='Angle' \
-                or obj.Label[:6]=='Square' or obj.Label[:7]=='Extrude' or obj.Label[:6]=='Fusion' or obj.Label[:6]=='Corner' \
-                    or obj.Label[:5]=='basic' or obj.Label[:4]=='Edge' or obj.Label[:3]=='hub' or obj.Label[:7]=='_8_tube'\
-                        or obj.Label[:5]=='plate' or obj.Label[:6]=='keyway' or obj.Label[:4]=='tube' or obj.Label[:5]=='color'\
-                            or obj.Label[:6]=='HShape':
-                pass 
-            else:
-                
-                if hasattr(obj, "mass") and obj.mass > 0:
-                    s=round(obj.mass+s,2)
-                    if obj.Label[:6]=='Return':
-                        n=returnArray.Count
-                    elif obj.Label[:7]=='Carrier':
-                        n=carrierArray.Count    
-                    else:
-                        n=1
-                    mass_list.append([obj.Label, '',n, obj.mass,round(obj.mass*n,2)])    
-
-        mass_list.append(['','', '','', s])    
-               
-        doc_path = doc.FileName
-        csv_filename = os.path.splitext(os.path.basename(doc_path))[0] + "_counts_and_masses.csv"
-        csv_path = os.path.join(os.path.dirname(doc_path), csv_filename)
-        try:
-            with open(csv_path, 'w', newline='') as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow(["Name",'Standard','Count','Unit[kg]', "Mass[kg]"])
-                writer.writerows(mass_list) 
-        except:
-            print('csvファイルを削除してください。')    
-            return    
-
     def massTally(self):#spreadsheet
         doc = App.ActiveDocument
         # 新しいスプレッドシートを作成
@@ -226,7 +184,7 @@ class Ui_Dialog(object):
             else:  
                 try:
                     spreadsheet.set(f"E{row}", f"{obj.mass:.2f}")  # Unit
-                    s=obj.mass+s
+                    
                     if hasattr(obj, "Shape") and obj.Shape.Volume > 0:
                         try:
                             spreadsheet.set(f"A{row}", str(row-1))  # No
@@ -244,6 +202,7 @@ class Ui_Dialog(object):
                             spreadsheet.set(f"D{row}", str(n))   # count
                             g=round(obj.mass*n,2)
                             spreadsheet.set(f"F{row}", str(g))   # g
+                            s=g+s
                             row += 1
                         except:
                             print('error')
@@ -273,6 +232,7 @@ class Ui_Dialog(object):
         global Self_Aligning_Carrier
         global Self_Aligning_Return
         global Parts_List
+        
         doc = FreeCAD.activeDocument()
         if doc:
              group_names = []
