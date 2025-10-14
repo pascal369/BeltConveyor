@@ -25,7 +25,8 @@ BDim={'400':( 145,   127.5,  10,  300,  260,  200,  500,  180,),
       '800':( 280,   260.0,  10,  460,  390,  200,  500,  180,),
       '900':( 315,   292.5,  10,  520,  440,  200,  500,  180,),
       '1000':(345,   327.5,  10,  520,  440,  200,  500,  180,),}
-      
+
+     
 # 画面を並べて表示する
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -46,29 +47,32 @@ class Ui_Dialog(object):
         #ベルト幅
         self.label_B = QtGui.QLabel('BeltWidth',Dialog)
         self.label_B.setGeometry(QtCore.QRect(30, 13, 100, 22))
+        self.label_B.setStyleSheet("color: gray;")
         self.comboBox_B = QtGui.QComboBox(Dialog)
         self.comboBox_B.setGeometry(QtCore.QRect(150, 13, 60, 22))
         self.comboBox_B.listIndex=11
         #テークアップ軸径
         self.label_d = QtGui.QLabel('takeUpDia',Dialog)
         self.label_d.setGeometry(QtCore.QRect(30, 38, 100, 22))
+        self.label_d.setStyleSheet("color: gray;")
         self.comboBox_d = QtGui.QComboBox(Dialog)
         self.comboBox_d.setGeometry(QtCore.QRect(150, 38, 60, 22))
         #self.comboBox_d.listIndex=11
         #プーリ径
         self.label_C = QtGui.QLabel('pulleyDia',Dialog)
         self.label_C.setGeometry(QtCore.QRect(30, 63, 100, 22))
+        self.label_C.setStyleSheet("color: gray;")
         self.le_C = QtGui.QLineEdit(Dialog)
         self.le_C.setGeometry(QtCore.QRect(150, 63, 60, 20))
         self.le_C.setAlignment(QtCore.Qt.AlignCenter)
         #作成
-        self.pushButton = QtGui.QPushButton(Dialog)
+        self.pushButton = QtGui.QPushButton('Create',Dialog)
         self.pushButton.setGeometry(QtCore.QRect(100, 90, 100, 22))
         #更新
-        self.pushButton2 = QtGui.QPushButton(Dialog)
+        self.pushButton2 = QtGui.QPushButton('Update',Dialog)
         self.pushButton2.setGeometry(QtCore.QRect(100, 115, 100, 22))
         #import
-        self.pushButton3 = QtGui.QPushButton(Dialog)
+        self.pushButton3 = QtGui.QPushButton('Import',Dialog)
         self.pushButton3.setGeometry(QtCore.QRect(100, 140, 100, 22))
         self.comboBox_B.addItems(BeltW)
         self.comboBox_d.addItems(takeupDia)
@@ -83,13 +87,12 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "takeUpAssy", None))
-        self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Create", None))  
-        self.pushButton2.setText(QtGui.QApplication.translate("Dialog", "Update", None))  
-        self.pushButton3.setText(QtGui.QApplication.translate("Dialog", "import", None))  
+        
 
     def import_data(self):
          global Take_upPulley
          global spreadsheet
+         global B
          selection = Gui.Selection.getSelection()
          # Partsグループが選択されているかチェック
          if selection:
@@ -100,7 +103,7 @@ class Ui_Dialog(object):
                      print(obj.Label)
                      if obj.Label=='Take_upPulley':
                          Take_upPulley=obj
-                     if obj.TypeId == "Spreadsheet::Sheet":
+                     elif obj.Label == "Spreadsheet_takeup":
                          spreadsheet = obj
                  B=spreadsheet.getContents('W0')
                  d0=spreadsheet.getContents('d0')
@@ -110,35 +113,30 @@ class Ui_Dialog(object):
                  self.le_C.setText(D0) 
    
     def update(self):
+         
          try:
              for i in range(3,12):
                  W0=self.comboBox_B.currentText()
-                 #print(W0)
-                 if W0==spreadsheet.getContents('A'+str(i)):
-                     
-                     #d0=spreadsheet.getContents('B'+str(i))
-                     D0=self.le_C.text()
-                     L0=spreadsheet.getContents('E'+str(i))
-                     C0=spreadsheet.getContents('F'+str(i))
-                     #B0=spreadsheet.getContents('G'+str(i))
-                     Y=spreadsheet.getContents('H'+str(i))
-                     
+                 if W0==spreadsheet.getContents('A'+str(i+2)):
                      break
+
+             W0=spreadsheet.getContents('A'+str(i+2))
+             d0=spreadsheet.getContents('B'+str(i+2))
+             D0=spreadsheet.getContents('D'+str(i+2))
+             L0=spreadsheet.getContents('E'+str(i+2))
+             B0=spreadsheet.getContents('G'+str(i+2))
+             Y=spreadsheet.getContents('H'+str(i+2))
+
              spreadsheet.set('W0',W0)  
-              
-             #spreadsheet.set('d0',d0) 
+             spreadsheet.set('d0',d0) 
              spreadsheet.set('D0',D0)    
-             spreadsheet.set('L0',L0)   
-             spreadsheet.set('C0',C0)   
-             #spreadsheet.set('B0',B0)   
+             spreadsheet.set('L0',L0)  
+             spreadsheet.set('B0',B0)   
              spreadsheet.set('Y',Y) 
-             #print('cccccccccccccccccccccccccccccccccccc',W0)     
-             Take_upPulley.C=float(C0)
-             
-             Take_upPulley.D=float(D0)
-             Take_upPulley.L=float(L0)
-             print(C0,D0,L0)
-             App.ActiveDocument.recompute()
+
+
+             Take_upPulley.BeltWidth=W0
+             App.ActiveDocument.recompute()    
          except:
              'error'
              return                 

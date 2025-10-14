@@ -37,11 +37,11 @@ class Ui_Dialog(object):
         self.label_6.setText("")
         
         base=os.path.dirname(os.path.abspath(__file__))
-        joined_path = os.path.join(base, 'Belt_data','png_data',"Belt.png")
+        joined_path = os.path.join(base, 'Belt_data','png_data',"Skirt.png")
         self.label_6.setPixmap(QtGui.QPixmap(joined_path))
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
-        self.label_6.setStyleSheet("color: gray;")
+        
         #ベルト幅
         self.label_B = QtGui.QLabel('BeltWidth',Dialog)
         self.label_B.setGeometry(QtCore.QRect(30, 13, 100, 22))
@@ -51,28 +51,12 @@ class Ui_Dialog(object):
         self.comboBox_B.listIndex=11
         
         #機長
-        self.label_C = QtGui.QLabel('CenterDistance[mm]',Dialog)
+        self.label_C = QtGui.QLabel('CenterDistance',Dialog)
         self.label_C.setGeometry(QtCore.QRect(30, 38, 100, 22))
         self.label_C.setStyleSheet("color: gray;")
         self.le_C = QtGui.QLineEdit(Dialog)
         self.le_C.setGeometry(QtCore.QRect(150, 38, 60, 20))
         self.le_C.setAlignment(QtCore.Qt.AlignCenter)
-
-        #headPullyDia
-        self.label_D = QtGui.QLabel('HeadPullyDia',Dialog)
-        self.label_D.setGeometry(QtCore.QRect(30, 63, 100, 22))
-        self.label_D.setStyleSheet("color: gray;")
-        self.le_D = QtGui.QLineEdit(Dialog)
-        self.le_D.setGeometry(QtCore.QRect(150, 63, 60, 20))
-        self.le_D.setAlignment(QtCore.Qt.AlignCenter)
-
-        #tailPullyDia
-        self.label_d = QtGui.QLabel('TailPullyDia',Dialog)
-        self.label_d.setGeometry(QtCore.QRect(30, 88, 100, 22))
-        self.label_d.setStyleSheet("color: gray;")
-        self.le_d = QtGui.QLineEdit(Dialog)
-        self.le_d.setGeometry(QtCore.QRect(150, 88, 60, 20))
-        self.le_d.setAlignment(QtCore.Qt.AlignCenter)
 
         #作成
         self.pushButton = QtGui.QPushButton(Dialog)
@@ -100,7 +84,7 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "3ローラートラフ型ベルト", None))
+        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Skirt", None))
         self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Create", None))  
         self.pushButton2.setText(QtGui.QApplication.translate("Dialog", "Update", None))  
 
@@ -122,39 +106,23 @@ class Ui_Dialog(object):
 
                          self.comboBox_B.setCurrentText(spreadsheet.getContents('B0'))
                          self.le_C.setText(spreadsheet.getContents('C0'))
-                         self.le_D.setText(spreadsheet.getContents('D0'))
-                         self.le_d.setText(spreadsheet.getContents('d1'))
+                         
     def update(self):
-         selection = Gui.Selection.getSelection()
-         for obj in selection:
-             try:
-                 key=self.comboBox_B.currentText()
-                 sa=BDim[key]
-                 L=self.le_C.text()
-                 D0=self.le_D.text()
-                 d1=float(D0)*0.8
-                 spreadsheet.set('B2',L)
-                 spreadsheet.set('B3',key)
-                 spreadsheet.set('B4',str(sa[0]))#b1
-                 spreadsheet.set('B5',str(sa[1]))#b2
-                 spreadsheet.set('B6',str(sa[2]))#t0
-                 spreadsheet.set('B7',D0)#D0  
-                 spreadsheet.set('B8',d1)#d1 
-                 spreadsheet.set('B9',str(sa[5]))#d2
-                 spreadsheet.set('B10',str(sa[6]))#Ls
-                 spreadsheet.set('B11',str(sa[7]))#h0
-             except:
-                 pass    
-         try:
-             obj.Standard='B='+key+'  L='+str(L)
-         except:
-             'error'
-             pass   
+        # selection = Gui.Selection.getSelection()
+        # for obj in selection:
+        #     try:
+         key=self.comboBox_B.currentText()
+         sa=BDim[key]
+         L=self.le_C.text()
+         W=float(key)+310
+         spreadsheet.set('B2',L)
+         spreadsheet.set('B3',key)
+         spreadsheet.set('W0',str(W))
          App.ActiveDocument.recompute()
 
     def create(self): 
          doc = App.ActiveDocument
-         fname='Belt0.FCStd'
+         fname='Skirt.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base,'Belt_data',fname) 
          try:

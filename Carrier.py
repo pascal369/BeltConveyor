@@ -10,23 +10,16 @@ from PySide import QtCore
 from FreeCAD import Base
 import FreeCAD, Part, math
 from math import pi
-import paramCarrierRoller
-import paramReturnRoller
-import paramSideRoller
 import paramCarrier
-import paramReturn
 Vscraper_haba=['500','600','750']
 belt_haba=['400','450','500','600','700','750','800','900','1000',]
-belt_buhin=['Assy','Frame','Belt','Pulleys','MotorPulley','Carrier','Return','BendPulleyAssy','CarrierRoller','ReturnRoller',
-            'SideRoller','Take-UP','Take-UpAssy','PillowBlock','V_shapedScraper','Skirt','Cover','Receptacle']
+belt_buhin=['Carrier','Return']
 spec_roller=['RubberLining','PVCLining',]
 groller_dia=['99','124']
 eroller_dia=['95','121']
 carrier_spec=['Fixed','Self_Aligning']
 roller_spec=['SteelPipe',]
-takeup_dia=['20','25','30','35','40','45','50']
-pillow_spec=['UCP204FC','UCP205FC','UCP206FC','UCP207FC','UCP208FC',
-             'UCP204FCD','UCP205FCD','UCP206FCD','UCP207FCD','UCP208FCD',]
+
 
 
 #ゴムライニング             キャリヤ　　　　　　　リターン
@@ -56,29 +49,6 @@ eroller_lst={
 '1000':( 120.5,    19,   375, 345,   1155,1100),
 }
 
-#サイドローラ              ゴムライニング
-#ベルト幅B　　ローラ径D　軸径d　軸長L　ローラ長l
-sgroller_lst={
-'1000':(   86,    16,   165, 120),
-}
-
-#サイドローラ              ゴムライニング
-#ベルト幅B　　ローラ径D　軸径d　軸長L　ローラ長l
-sgroller2_lst={
-'1000':(   86,    16,   140, 100),
-}
-
-#サイドローラ              塩ビライニング
-#ベルト幅B　　ローラ径D　軸径d　軸長L　ローラ長l
-seroller_lst={
-'1000':(   81,    16,   165, 120),
-}
-
-#サイドローラ              塩ビライニング
-#ベルト幅B　　ローラ径D　軸径d　軸長L　ローラ長l
-seroller2_lst={
-'1000':(   81,    16,   140, 100),
-}
 
 #ｼﾘｰｽﾞ,寸法(mm),,,,,断面積,質量,重心(cm),,断面2次ﾓｰﾒﾝﾄ(cm4),,,断面2次半径,,,断面係数(cm3),
 #          A, B, t,r1, r2, (cm2),(kg/m),Cx,  Cy,  Ix,  Iy,  最小Iv,ix,  iy,  最小iv,Zx,  Zy
@@ -96,7 +66,7 @@ channel_lst={
 }
 
 #キャリヤ
-#ベルト幅B　M　  A0    N   B0   h    H    L0     g[kg]
+#ベルト幅B　　　M　  A0    N   B0   h    H    L0     g[kg]
 Carrier_lst={
 '400':(   640, 690, 140,190, 125, 229, 469, 'L6x50',14),
 '450':(   690, 740, 140,190, 125, 236, 526, 'L6x50',15),
@@ -161,7 +131,6 @@ class Ui_Dialog(object):
         self.label = QtGui.QLabel('BeltWidth',Dialog)
         self.label.setGeometry(QtCore.QRect(11, 37, 61, 16))
         self.label.setObjectName("label")
-        self.label.setStyleSheet("color: gray;")
         self.comboBox = QtGui.QComboBox(Dialog)
         self.comboBox.setGeometry(QtCore.QRect(80, 37, 130, 20))
         self.comboBox.setObjectName("comboBox")
@@ -172,12 +141,10 @@ class Ui_Dialog(object):
         self.label_2 = QtGui.QLabel('Parts',Dialog)
         self.label_2.setGeometry(QtCore.QRect(11, 11, 61, 16))
         self.label_2.setObjectName("label_2")
-        self.label_2.setStyleSheet("color: gray;")
         #仕様Spec
         self.label_3 = QtGui.QLabel('Spec',Dialog)
         self.label_3.setGeometry(QtCore.QRect(11, 63, 61, 16))
         self.label_3.setObjectName("label_3")
-        self.label_3.setStyleSheet("color: gray;")
         self.comboBox_3 = QtGui.QComboBox(Dialog)
         self.comboBox_3.setGeometry(QtCore.QRect(80, 63, 130, 20))
         self.comboBox_3.setObjectName("comboBox_3")
@@ -185,19 +152,17 @@ class Ui_Dialog(object):
         self.comboBox_4 = QtGui.QComboBox(Dialog)
         self.comboBox_4.setGeometry(QtCore.QRect(80, 90, 130, 20))
         self.comboBox_4.setObjectName("comboBox_4")
-        
         self.label_6 = QtGui.QLabel('Spec2',Dialog)
         self.label_6.setGeometry(QtCore.QRect(12, 90, 51, 16))
         self.label_6.setObjectName("label_6")
-        self.label_6.setStyleSheet("color: gray;")
         #png
         self.label_5 = QtGui.QLabel(Dialog)
         self.label_5.setGeometry(QtCore.QRect(225, 10, 121, 101))
-        self.label_5.setAlignment(QtCore.Qt.AlignTop)
+        self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5.setObjectName("label_5")
         
         #実行
-        self.pushButton = QtGui.QPushButton('Execute',Dialog)
+        self.pushButton = QtGui.QPushButton('Create',Dialog)
         self.pushButton.setGeometry(QtCore.QRect(30, 120, 75, 23))
         self.pushButton.setObjectName("pushButton")
         #Import
@@ -227,7 +192,7 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", 'Belt Conveyor', None))
+        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", 'Carrier', None))
         
     def importData(self):
         global Carrier
@@ -245,12 +210,9 @@ class Ui_Dialog(object):
                          Carrier=obj
                      elif obj.Label=='Return':
                          Return=obj
-                     elif obj.Label=='BendPulleyAssy':
-                         BendPulleyAssy=obj    
-                     elif obj.Label=='V_shapedScraper':
-                         V_shapedScraper=obj        
-
-   
+                 self.comboBox.setCurrentText(obj.BeltWidth)         
+                     
+    
     def uPdate(self):
          doc = App.ActiveDocument
          selection = Gui.Selection.getSelection()
@@ -258,8 +220,8 @@ class Ui_Dialog(object):
             App.Console.PrintMessage("オブジェクトを選択してください。\n")
 
          for obj in selection: 
-             if obj.Label=='Carrier' or obj.Label=='Return' or obj.Label=='V-shaped_scraper':  
-                 doc.removeObject(obj.Name)
+             if obj.Label=='Carrier' or obj.Label=='Return' :  
+                 obj.BeltWidth=self.comboBox.currentText()
         
     def onSpec(self):
         global buhin
@@ -267,28 +229,8 @@ class Ui_Dialog(object):
         buhin=self.comboBox_2.currentText()
         spec=self.comboBox_3.currentText()
         
-        if buhin=='CarrierRoller':
-            self.comboBox.show()
-            self.comboBox_3.show()
-            self.comboBox_4.show()
-            pic=buhin+'.png' 
-            ta=spec_roller
-            tb=roller_spec
-        elif buhin=='ReturnRoller':
-            self.comboBox.show()
-            self.comboBox_3.show()
-            self.comboBox_4.show()
-            pic=buhin+'.png' 
-            ta=spec_roller
-            tb=roller_spec
-        elif buhin=='SideRoller':
-            self.comboBox.show()
-            self.comboBox_3.show()
-            self.comboBox_4.show()
-            pic=buhin+'.png' 
-            ta=spec_roller
-            tb=roller_spec
-        elif buhin=='Carrier':
+        
+        if buhin=='Carrier':
             self.comboBox.show()
             self.comboBox_3.show()
             self.comboBox_4.show()
@@ -300,78 +242,6 @@ class Ui_Dialog(object):
             self.comboBox_4.show()
             ta=spec_roller
             tb=carrier_spec
-        elif buhin=='Pulleys':
-            self.comboBox_2.show()
-            self.comboBox_3.hide()
-            self.comboBox_4.hide()
-            pic='Pulleys.png'
-        elif buhin=='MotorPulley':  
-            self.comboBox.show()
-            self.comboBox_3.hide()
-            self.comboBox_4.hide()
-            pic=buhin+'.png'
-        elif buhin=='Take-UP':   
-            self.comboBox.show()
-            self.comboBox_2.show()
-            self.comboBox_3.show()
-            #self.comboBox_4.show()
-            pic=buhin+'.png'   
-            tb=takeup_dia
-        elif buhin=='PillowBlock': 
-            self.comboBox.show() 
-            self.comboBox_3.show()
-            self.comboBox_4.hide() 
-            pic=buhin+'.png'   
-            tb=pillow_spec 
-        elif buhin=='Assy':  
-            self.comboBox.hide() 
-            self.comboBox_3.hide()  
-            self.comboBox_4.hide()  
-            pic='Belt_Assy.png'
-            #print(buhin)
-            #self.comboBox_3.clear()
-        elif buhin=='Frame':  
-            self.comboBox.hide() 
-            self.comboBox_3.hide()  
-            self.comboBox_4.hide()  
-            pic='Frame2.png'
-            #print(buhin)
-            #self.comboBox_3.clear()    
-        elif buhin=='Belt':  
-            self.comboBox.hide() 
-            self.comboBox_3.hide()  
-            self.comboBox_4.hide()   
-            pic='Belt.png'
-        elif buhin=='V_shapedScraper':  
-            self.comboBox.clear()
-            self.comboBox.addItems(Vscraper_haba)
-            self.comboBox.show() 
-            self.comboBox_3.hide()  
-            self.comboBox_4.hide()   
-            pic=buhin+'png'
-
-        elif buhin=='Take-UpAssy':
-            self.comboBox.hide() 
-            self.comboBox_3.hide()  
-            self.comboBox_4.hide()  
-            pic='takeupAssy.png'
-
-        elif buhin=='BendPulleyAssy'or buhin=='Skirt':
-            self.comboBox.show() 
-            self.comboBox_3.hide()  
-            self.comboBox_4.hide()  
-            pic=buhin+'.png'  
-            print(pic)  
-        elif  buhin=='Skirt':
-            self.comboBox.show() 
-            self.comboBox_3.hide()  
-            self.comboBox_4.hide()  
-            pic='Skirt2.png'  
-        elif  buhin=='Cover':
-            self.comboBox.show() 
-            self.comboBox_3.hide()  
-            self.comboBox_4.hide()  
-            pic='Cover.png'      
 
         self.comboBox_3.clear()    
         try:
@@ -390,10 +260,7 @@ class Ui_Dialog(object):
             pic=buhin +'_' + spec + '.png'
         elif buhin=='Return':
             pic=buhin +'_' + spec + '.png'
-        elif buhin=='Skirt':
-            pic=buhin+'2.png'     
-        else:
-            pic=buhin+'.png'      
+        
 
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, "Belt_data",'png_data',pic)
@@ -405,10 +272,7 @@ class Ui_Dialog(object):
             pic=buhin +'_'  + spec2 + '.png'
         elif buhin=='Return':
             pic=buhin+'_'  + spec2 + '.png'
-        elif buhin=='Frame':
-            pic='Frame2.png'
-        elif buhin=='BendPully':
-            pic=buhin+'.png'   
+        
             
         else:
             pic=buhin + '.png'
@@ -430,186 +294,37 @@ class Ui_Dialog(object):
         self.label_5.setPixmap(QtGui.QPixmap(joined_path))
 
     def create(self):
-        if buhin=='Pulleys':
-            import Belt_data.BltCvPulley
-            pass
-
-        elif buhin=='MotorPulley':
-            import Belt_data.MotorPulley
-            pass
-
-        elif buhin=='CarrierRoller':
-            label=buhin
-            try:
-                obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-            except:
-                doc=App.newDocument()
-                obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-
+        label='Carrier'
+        try:
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+        except:
+            doc=App.newDocument()
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+        BeltWidth=self.comboBox.currentText()
+        spec=self.comboBox_3.currentText()
+        spec2=self.comboBox_4.currentText()
+        if label=='Carrier':
+            obj.addProperty("App::PropertyString", "spec",label).spec=spec
+            obj.addProperty("App::PropertyString", "spec2",label).spec2=spec2
             obj.addProperty("App::PropertyEnumeration", "BeltWidth",label)
             i=self.comboBox.currentIndex()  
-            obj.BeltWidth=belt_haba
-            obj.BeltWidth=belt_haba[i]  
-
-            obj.addProperty("App::PropertyEnumeration", "spec",label)
-            i=self.comboBox_4.currentIndex()  
-            obj.spec=spec_roller
-            obj.spec=spec_roller[i]  
-
-            paramCarrierRoller.C_roller(obj)
-            obj.ViewObject.Proxy=0
-            FreeCAD.ActiveDocument.recompute()    
-
-        elif buhin=='ReturnRoller':
-            label=buhin
-            try:
-                obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-            except:
-                doc=App.newDocument()
-                obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-
-            obj.addProperty("App::PropertyEnumeration", "BeltWidth",label)
-            i=self.comboBox.currentIndex()  
-            obj.BeltWidth=belt_haba
-            obj.BeltWidth=belt_haba[i]  
-
-            obj.addProperty("App::PropertyEnumeration", "spec",label)
-            i=self.comboBox_4.currentIndex()  
-            obj.spec=spec_roller
-            obj.spec=spec_roller[i]  
-
-            paramReturnRoller.R_roller(obj)
-            obj.ViewObject.Proxy=0
-            FreeCAD.ActiveDocument.recompute()   
-               
-            return
-        elif buhin=='SideRoller':
-            label=buhin
-            try:
-                obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-            except:
-                doc=App.newDocument()
-                obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-
-            obj.addProperty("App::PropertyString", "BeltWidth",label)
-            obj.BeltWidth='1000'
-
-            obj.addProperty("App::PropertyEnumeration", "spec",label)
-            i=self.comboBox_4.currentIndex()  
-            obj.spec=spec_roller
-            obj.spec=spec_roller[i]  
-
-            paramSideRoller.s_roller(obj)
-            obj.ViewObject.Proxy=0
-            FreeCAD.ActiveDocument.recompute()   
-
-        elif buhin=='Carrier':
-            label=buhin
-            try:
-                obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-            except:
-                doc=App.newDocument()
-                obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-
-            obj.addProperty("App::PropertyEnumeration", "BeltWidth",label)
-            i=self.comboBox.currentIndex()  
-            obj.BeltWidth=belt_haba
-            obj.BeltWidth=belt_haba[i]  
-
-            obj.addProperty("App::PropertyEnumeration", "spec2",label)
-            i=self.comboBox_4.currentIndex()  
-            obj.spec2=spec_roller
-            obj.spec2=spec_roller[i]  
-
-            obj.addProperty("App::PropertyEnumeration", "spec",label)
-            i=self.comboBox_3.currentIndex()  
-            obj.spec=carrier_spec
-            obj.spec=carrier_spec[i] 
-
+            sa=belt_haba
+            print(obj.Label)
+            obj.BeltWidth=sa[i]
+    
             paramCarrier.Carrier(obj)
             obj.ViewObject.Proxy=0
-            FreeCAD.ActiveDocument.recompute()   
-        
-        elif buhin=='Return':
-            label=buhin
-            try:
-                obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-            except:
-                doc=App.newDocument()
-                obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            FreeCAD.ActiveDocument.recompute() 
 
-            obj.addProperty("App::PropertyEnumeration", "BeltWidth",label)
-            i=self.comboBox.currentIndex()  
-            obj.BeltWidth=belt_haba
-            obj.BeltWidth=belt_haba[i]  
 
-            obj.addProperty("App::PropertyEnumeration", "spec2",label)
-            i=self.comboBox_4.currentIndex()  
-            obj.spec2=spec_roller
-            obj.spec2=spec_roller[i]  
-
-            obj.addProperty("App::PropertyEnumeration", "spec",label)
-            i=self.comboBox_3.currentIndex()  
-            obj.spec=carrier_spec
-            obj.spec=carrier_spec[i] 
-
-            paramReturn.Return(obj)
-            obj.ViewObject.Proxy=0
-            FreeCAD.ActiveDocument.recompute()   
-            
-        elif buhin=='Take-UP'or buhin=='PillowBlock' :
-            #buhinmei=buhin
-            base=os.path.dirname(os.path.abspath(__file__))
-            if buhin=='Take-UP':
-                fname=buhin+'_'+self.comboBox_3.currentText()+'.FCStd'
-                joined_path = os.path.join(base, 'Belt_data','takeup_data',fname) 
-            elif buhin[:11]=='PillowBlock':
-                fname=self.comboBox_3.currentText()+'.FCStd'
-                joined_path = os.path.join(base, 'Belt_data','brg_data',fname) 
-            try:
-                Gui.ActiveDocument.mergeProject(joined_path)
-            except:
-                doc=App.newDocument()
-                Gui.ActiveDocument.mergeProject(joined_path)  
-            App.ActiveDocument.recompute()  
-            Gui.ActiveDocument.ActiveView.fitAll()
-            return  
-        elif buhin=='BendPulleyAssy':
-            base=os.path.dirname(os.path.abspath(__file__)) 
-            fname='BendPulleyAssy.FCStd'
-            joined_path = os.path.join(base,'Belt_data',fname) 
-            try:
-                Gui.ActiveDocument.mergeProject(joined_path)
-            except:
-                doc=App.newDocument()
-                Gui.ActiveDocument.mergeProject(joined_path)  
-            App.ActiveDocument.recompute()  
-            Gui.ActiveDocument.ActiveView.fitAll()    
-            return
-        elif buhin=='Assy':
-            import Belt_Assy
-        elif buhin=='Frame':
-            import Frame  
-        elif buhin=='Belt':
-            import Belt 
-            return 
-        elif buhin=='V_shapedScraper' :
-             import vScraper
-             return
-        elif buhin=='Take-UpAssy':
-            import TakeUpAssy     
-
-        elif buhin=='Skirt':
-            import Skirt  
-        elif buhin=='Cover':
-            import Cover   
-        elif buhin=='Receptacle':
-            import Receptacle      
-
+     
 class main():
         d = QtGui.QWidget()
         d.ui = Ui_Dialog()
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()
+        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
+        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
+     
 

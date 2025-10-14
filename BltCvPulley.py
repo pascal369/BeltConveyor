@@ -13,8 +13,7 @@ import Sketcher
 import PartDesign
 from math import pi
 import Draft
-from . import paramPulley
-
+import paramPulley
 belt_haba=['400','450','500','600','700','750','800','900','1000',]
 pulley_buhin=['DrivePulley','HeadPulley','Take_upPulley','TailPulley','BendPulley','SnapPulley'
 ]
@@ -256,99 +255,29 @@ class Ui_Dialog(object):
         self.lineEdit_15.setText(str(t4))
     
     def create(self):
-        print(buhin)
-        
         label=buhin
         try:
             obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
         except:
             doc=App.newDocument()
             obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+          
+            obj.addProperty("App::PropertyEnumeration", "BeltWidth",label)
+            i=self.comboBox.currentIndex()  
+            sa=belt_haba
+            obj.BeltWidth=sa[i] 
 
-        if label=='DrivePulley' :
-            L=float(self.lineEdit_30.text())
-            A=float(self.lineEdit_3.text())
-            B=float(self.lineEdit_6.text())
-            C=float(self.lineEdit_30.text())+50
-            D=float(self.lineEdit_7.text())
-            E=float(self.lineEdit_8.text())
-            d1=float(self.lineEdit_9.text())
-            d2=float(self.lineEdit_10.text())
-            d3=float(self.lineEdit_11.text())
-
-            t1=float(self.lineEdit_12.text())
-            t2=float(self.lineEdit_13.text())
-            t3=float(self.lineEdit_14.text())
-            t4=float(self.lineEdit_15.text())
-            
-            obj.addProperty("App::PropertyFloat", "L",label).L=L
-            obj.addProperty("App::PropertyFloat", "A",label).A=A
-            obj.addProperty("App::PropertyFloat", "B",label).B=B
-            obj.addProperty("App::PropertyFloat", "C",label).C=C
-            obj.addProperty("App::PropertyFloat", "D",label).D=D
-            obj.addProperty("App::PropertyFloat", "E",label).E=E
-            obj.addProperty("App::PropertyFloat", "d1",label).d1=d1
-            obj.addProperty("App::PropertyFloat", "d2",label).d2=d2
-            obj.addProperty("App::PropertyFloat", "d3",label).d3=d3
-            #obj.addProperty("App::PropertyFloat", "d4",label).d4=d4
-            obj.addProperty("App::PropertyFloat", "t1",label).t1=t1
-            obj.addProperty("App::PropertyFloat", "t2",label).t2=t2
-            obj.addProperty("App::PropertyFloat", "t3",label).t3=t3
-            obj.addProperty("App::PropertyFloat", "t4",label).t4=t4
+            obj.addProperty("App::PropertyString", "L",label).L=str(L) 
 
             paramPulley.Pulleys(obj)
             obj.ViewObject.Proxy=0
             FreeCAD.ActiveDocument.recompute() 
-
-            
-        elif label=='HeadPulley' or label=='Take_upPulley'or label=='BendPulley'\
-            or label=='SnapPulley':
-            L=float(self.lineEdit_30.text())
-            A=float(self.lineEdit_3.text())
-            B=float(self.lineEdit_6.text())
-            C=float(self.lineEdit_30.text())+50
-            D=float(self.lineEdit_7.text())
-            E=float(self.lineEdit_8.text())
-            d1=float(self.lineEdit_9.text())
-            d2=float(self.lineEdit_10.text())
-            d3=float(self.lineEdit_11.text())
-
-            t1=float(self.lineEdit_12.text())
-            t2=float(self.lineEdit_13.text())
-            t3=float(self.lineEdit_14.text())
-            t4=float(self.lineEdit_15.text())
-            
-            obj.addProperty("App::PropertyFloat", "L",label).L=L
-            obj.addProperty("App::PropertyFloat", "A",label).A=A
-            obj.addProperty("App::PropertyFloat", "B",label).B=B
-            obj.addProperty("App::PropertyFloat", "C",label).C=C
-            obj.addProperty("App::PropertyFloat", "D",label).D=D
-            obj.addProperty("App::PropertyFloat", "E",label).E=E
-            obj.addProperty("App::PropertyFloat", "d1",label).d1=d1
-            obj.addProperty("App::PropertyFloat", "d2",label).d2=d2
-            obj.addProperty("App::PropertyFloat", "d3",label).d3=d3
-            obj.addProperty("App::PropertyFloat", "t1",label).t1=t1
-            obj.addProperty("App::PropertyFloat", "t2",label).t2=t2
-            obj.addProperty("App::PropertyFloat", "t3",label).t3=t3
-            obj.addProperty("App::PropertyFloat", "t4",label).t4=t4
-            try:
-                doc=App.activeDocument()
-            except:
-                doc=App.newDocumento()    
-
-            paramPulley.Pulleys(obj)
-            obj.ViewObject.Proxy=0
-            FreeCAD.ActiveDocument.recompute()   
-        Gui.SendMsgToActiveView("ViewFit")    
-
 class main():
         d = QtGui.QWidget()
         d.ui = Ui_Dialog()
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()
-        # スクリプトのウィンドウを取得
         script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
-        # 閉じるボタンを無効にする
         script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
      
