@@ -26,6 +26,7 @@ class Ui_Dialog(object):
         #ベルト幅
         self.label_B = QtGui.QLabel('BeltWidth',Dialog)
         self.label_B.setGeometry(QtCore.QRect(11, 11, 61, 16))
+        self.label_B.setStyleSheet("color: gray;")
         self.label_B.setObjectName("label")
         self.comboBox_B = QtGui.QComboBox(Dialog)
         self.comboBox_B.setGeometry(QtCore.QRect(80, 11, 130, 20))
@@ -33,6 +34,7 @@ class Ui_Dialog(object):
         #A
         self.label_30 = QtGui.QLabel('A',Dialog)
         self.label_30.setGeometry(QtCore.QRect(50, 63, 61, 16))
+        self.label_30.setStyleSheet("color: gray;")
         self.label_30.setObjectName("label_3")
         self.lineEdit_30 = QtGui.QLineEdit(Dialog)
         self.lineEdit_30.setGeometry(QtCore.QRect(80, 63, 50, 20))
@@ -40,6 +42,7 @@ class Ui_Dialog(object):
         #a
         self.label_3 = QtGui.QLabel('a',Dialog)
         self.label_3.setGeometry(QtCore.QRect(50, 93, 61, 16))
+        self.label_3.setStyleSheet("color: gray;")
         self.label_3.setObjectName("label_3")
         self.lineEdit_3 = QtGui.QLineEdit(Dialog)
         self.lineEdit_3.setGeometry(QtCore.QRect(80, 93, 50, 20))
@@ -47,6 +50,7 @@ class Ui_Dialog(object):
         #b
         self.label_6 = QtGui.QLabel('b',Dialog)
         self.label_6.setGeometry(QtCore.QRect(50, 120, 61, 16))
+        self.label_6.setStyleSheet("color: gray;")
         self.label_6.setObjectName("label_6")
         self.lineEdit_6 = QtGui.QLineEdit(Dialog)
         self.lineEdit_6.setGeometry(QtCore.QRect(80, 120, 50, 20))
@@ -54,6 +58,7 @@ class Ui_Dialog(object):
         #D
         self.label_50 = QtGui.QLabel('D',Dialog)
         self.label_50.setGeometry(QtCore.QRect(50, 150, 61, 16))
+        self.label_50.setStyleSheet("color: gray;")
         self.label_50.setObjectName("label_6")
         self.lineEdit_50 = QtGui.QLineEdit(Dialog)
         self.lineEdit_50.setGeometry(QtCore.QRect(80, 150, 50, 20))
@@ -61,6 +66,7 @@ class Ui_Dialog(object):
         #D1
         self.label_7 = QtGui.QLabel('D1',Dialog)
         self.label_7.setGeometry(QtCore.QRect(50, 180, 61, 16))
+        self.label_7.setStyleSheet("color: gray;")
         self.label_7.setObjectName("label_7")
         self.lineEdit_7 = QtGui.QLineEdit(Dialog)
         self.lineEdit_7.setGeometry(QtCore.QRect(80, 180, 50, 20))
@@ -68,6 +74,7 @@ class Ui_Dialog(object):
         #D2
         self.label_8 = QtGui.QLabel('D2',Dialog)
         self.label_8.setGeometry(QtCore.QRect(50, 210, 61, 16))
+        self.label_8.setStyleSheet("color: gray;")
         self.label_8.setObjectName("label_8")
         self.lineEdit_8 = QtGui.QLineEdit(Dialog)
         self.lineEdit_8.setGeometry(QtCore.QRect(80, 210, 50, 20))
@@ -75,6 +82,7 @@ class Ui_Dialog(object):
         #D3
         self.label_9 = QtGui.QLabel('D3',Dialog)
         self.label_9.setGeometry(QtCore.QRect(50, 240, 61, 16))
+        self.label_9.setStyleSheet("color: gray;")
         self.label_9.setObjectName("label_9")
         self.lineEdit_9 = QtGui.QLineEdit(Dialog)
         self.lineEdit_9.setGeometry(QtCore.QRect(80, 240, 50, 20))
@@ -82,6 +90,7 @@ class Ui_Dialog(object):
         #F
         self.label_F = QtGui.QLabel('F',Dialog)
         self.label_F.setGeometry(QtCore.QRect(50, 270, 61, 16))
+        self.label_F.setStyleSheet("color: gray;")
         self.label_F.setObjectName("label_F")
         self.lineEdit_F = QtGui.QLineEdit(Dialog)
         self.lineEdit_F.setGeometry(QtCore.QRect(80, 270, 50, 20))
@@ -89,6 +98,7 @@ class Ui_Dialog(object):
         #L
         self.label_10 = QtGui.QLabel('L',Dialog)
         self.label_10.setGeometry(QtCore.QRect(140, 63, 61, 16))
+        self.label_10.setStyleSheet("color: gray;")
         self.label_10.setObjectName("label_10")
         self.lineEdit_10 = QtGui.QLineEdit(Dialog)
         self.lineEdit_10.setGeometry(QtCore.QRect(160, 63, 50, 20))
@@ -96,6 +106,7 @@ class Ui_Dialog(object):
         #C
         self.label_11 = QtGui.QLabel('C',Dialog)
         self.label_11.setGeometry(QtCore.QRect(140, 90, 61, 16))
+        self.label_11.setStyleSheet("color: gray;")
         self.label_11.setObjectName("label_11")
         self.lineEdit_11 = QtGui.QLineEdit(Dialog)
         self.lineEdit_11.setGeometry(QtCore.QRect(160, 90, 50, 20))
@@ -103,6 +114,7 @@ class Ui_Dialog(object):
         #E
         self.label_12 = QtGui.QLabel('E',Dialog)
         self.label_12.setGeometry(QtCore.QRect(140, 120, 61, 16))
+        self.label_12.setStyleSheet("color: gray;")
         self.label_12.setObjectName("label_12")
         self.lineEdit_12 = QtGui.QLineEdit(Dialog)
         self.lineEdit_12.setGeometry(QtCore.QRect(160, 120, 50, 20))
@@ -110,6 +122,7 @@ class Ui_Dialog(object):
         #M
         self.label_13 = QtGui.QLabel('M',Dialog)
         self.label_13.setGeometry(QtCore.QRect(140, 150, 61, 16))
+        self.label_13.setStyleSheet("color: gray;")
         self.label_13.setObjectName("label_13")
         self.lineEdit_13 = QtGui.QLineEdit(Dialog)
         self.lineEdit_13.setGeometry(QtCore.QRect(160, 150, 50, 20))
@@ -117,6 +130,7 @@ class Ui_Dialog(object):
         #R
         self.label_14 = QtGui.QLabel('R',Dialog)
         self.label_14.setGeometry(QtCore.QRect(140, 180, 61, 16))
+        self.label_14.setStyleSheet("color: gray;")
         self.label_14.setObjectName("label_14")
         self.lineEdit_14 = QtGui.QLineEdit(Dialog)
         self.lineEdit_14.setGeometry(QtCore.QRect(160, 180, 50, 20))
@@ -124,6 +138,7 @@ class Ui_Dialog(object):
         #N1
         self.label_15 = QtGui.QLabel('N1',Dialog)
         self.label_15.setGeometry(QtCore.QRect(140, 210, 61, 16))
+        self.label_15.setStyleSheet("color: gray;")
         self.label_15.setObjectName("label_15")
         self.lineEdit_15 = QtGui.QLineEdit(Dialog)
         self.lineEdit_15.setGeometry(QtCore.QRect(160, 210, 50, 20))
@@ -131,6 +146,7 @@ class Ui_Dialog(object):
         #G1
         self.label_G1 = QtGui.QLabel('G1',Dialog)
         self.label_G1.setGeometry(QtCore.QRect(230, 210, 61, 16))
+        self.label_G1.setStyleSheet("color: gray;")
         self.label_G1.setObjectName("label_15")
         self.lineEdit_G1 = QtGui.QLineEdit(Dialog)
         self.lineEdit_G1.setGeometry(QtCore.QRect(250, 210, 50, 20))
@@ -139,6 +155,7 @@ class Ui_Dialog(object):
         #P
         self.label_P = QtGui.QLabel('P',Dialog)
         self.label_P.setGeometry(QtCore.QRect(320, 210, 61, 16))
+        self.label_P.setStyleSheet("color: gray;")
         self.label_P.setObjectName("label_P")
         self.lineEdit_P = QtGui.QLineEdit(Dialog)
         self.lineEdit_P.setGeometry(QtCore.QRect(350, 210, 50, 20))
@@ -147,6 +164,7 @@ class Ui_Dialog(object):
         #G2
         self.label_G2 = QtGui.QLabel('G2',Dialog)
         self.label_G2.setGeometry(QtCore.QRect(230, 240, 61, 16))
+        self.label_G2.setStyleSheet("color: gray;")
         self.label_G2.setObjectName("label_G2")
         self.lineEdit_G2 = QtGui.QLineEdit(Dialog)
         self.lineEdit_G2.setGeometry(QtCore.QRect(250, 240, 50, 20))
@@ -155,6 +173,7 @@ class Ui_Dialog(object):
         #H
         self.label_H = QtGui.QLabel('H',Dialog)
         self.label_H.setGeometry(QtCore.QRect(230, 270, 61, 16))
+        self.label_H.setStyleSheet("color: gray;")
         self.label_H.setObjectName("label_H")
         self.lineEdit_H = QtGui.QLineEdit(Dialog)
         self.lineEdit_H.setGeometry(QtCore.QRect(250, 270, 50, 20))
@@ -163,6 +182,7 @@ class Ui_Dialog(object):
         #N2
         self.label_16 = QtGui.QLabel('N2',Dialog)
         self.label_16.setGeometry(QtCore.QRect(140, 240, 61, 16))
+        self.label_16.setStyleSheet("color: gray;")
         self.label_16.setObjectName("label_16")
         self.lineEdit_16 = QtGui.QLineEdit(Dialog)
         self.lineEdit_16.setGeometry(QtCore.QRect(160, 240, 50, 20))
@@ -170,6 +190,7 @@ class Ui_Dialog(object):
         #d
         self.label_17 = QtGui.QLabel('d',Dialog)
         self.label_17.setGeometry(QtCore.QRect(140, 270, 61, 16))
+        self.label_17.setStyleSheet("color: gray;")
         self.label_17.setObjectName("label_17")
         self.lineEdit_17 = QtGui.QLineEdit(Dialog)
         self.lineEdit_17.setGeometry(QtCore.QRect(160, 270, 50, 20))
@@ -218,7 +239,8 @@ class Ui_Dialog(object):
         selection = Gui.Selection.getSelection()
         for obj in selection:
             try:
-                self.comboBox_2.setCurrentText(obj.Standard)
+                self.comboBox_B.setCurrentText(obj.BeltWidth)
+
             except:
                 pass
         App.ActiveDocument.recompute()   
@@ -227,12 +249,13 @@ class Ui_Dialog(object):
         sb=mtrply_data.pulley_buhin
         selection = Gui.Selection.getSelection()
         for obj in selection:
-            try:
-                i=self.comboBox_B.currentIndex()
-                obj.Standard=sb[i]+'  beltWidth='+str(int(B1))+'-'+str(int(B2))
-            except:
-                print('error')
-        label=sb[i]
+            obj.BeltWidth=self.comboBox_B.currentText()
+        #    try:
+        #        i=self.comboBox_B.currentIndex()
+        #        obj.Standard=sb[i]+'  beltWidth='+str(int(B1))+'-'+str(int(B2))
+        #    except:
+        #        print('error')
+        #label=sb[i]
         App.ActiveDocument.recompute()         
 
     def onSpec(self):
