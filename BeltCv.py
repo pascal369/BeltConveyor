@@ -260,6 +260,8 @@ class Ui_Dialog(object):
          for obj in selection: 
              if obj.Label=='Carrier' or obj.Label=='Return' or obj.Label=='V-shaped_scraper':  
                  doc.removeObject(obj.Name)
+             elif obj.Label=='MotorPulley':
+                 obj.BeltWidth  == self.comboBox.currentText()      
         
     def onSpec(self):
         global buhin

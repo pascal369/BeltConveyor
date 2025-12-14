@@ -405,7 +405,7 @@ class Ui_Dialog(object):
             spreadsheet.set('post_x',str(post_x))
             
             Take_upPulley.BeltWidth=spreadsheet.getContents('B0')
-            
+            MotorPulley.BeltWidth=spreadsheet.getContents('B0')
             Carrier.BeltWidth=spreadsheet.getContents('B0')
             Self_Aligning_Carrier.BeltWidth=spreadsheet.getContents('B0')
             Return.BeltWidth=spreadsheet.getContents('B0')
