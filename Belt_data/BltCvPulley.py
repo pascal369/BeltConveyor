@@ -10,7 +10,8 @@ from FreeCAD import Base
 import FreeCAD, Part, math
 from math import pi
 from .import paramPulley
-
+from pivy import coin
+from PySide2 import QtCore
 belt_haba=['400','450','500','600','700','750','800','900','1000',]
 pulley_buhin=['DrivePulley','HeadPulley','Take_upPulley','TailPulley','BendPulley','SnapPulley'
 ]
@@ -34,9 +35,9 @@ class Ui_Dialog(object):
         Dialog.resize(400, 325)
         Dialog.move(900, 0)
         #ベルト幅
-        self.label = QtGui.QLabel(Dialog)
+        self.label = QtGui.QLabel('beltWidth',Dialog)
         self.label.setGeometry(QtCore.QRect(11, 37, 61, 16))
-        self.label.setObjectName("label")
+        self.label.setStyleSheet("color: gray;")
         self.comboBox = QtGui.QComboBox(Dialog)
         self.comboBox.setGeometry(QtCore.QRect(80, 37, 130, 20))
         self.comboBox.setObjectName("comboBox")
@@ -44,97 +45,97 @@ class Ui_Dialog(object):
         self.comboBox_2 = QtGui.QComboBox(Dialog)
         self.comboBox_2.setGeometry(QtCore.QRect(80, 11, 130, 20))
         self.comboBox_2.setObjectName("comboBox_2")
-        self.label_2 = QtGui.QLabel(Dialog)
+        self.label_2 = QtGui.QLabel('parts',Dialog)
         self.label_2.setGeometry(QtCore.QRect(11, 11, 61, 16))
-        self.label_2.setObjectName("label_2")
+        self.label_2.setStyleSheet("color: gray;")
         #L
         self.label_30 = QtGui.QLabel('L',Dialog)
         self.label_30.setGeometry(QtCore.QRect(50, 63, 61, 16))
-        self.label_30.setObjectName("label_3")
+        self.label_30.setStyleSheet("color: gray;")
         self.lineEdit_30 = QtGui.QLineEdit(Dialog)
         self.lineEdit_30.setGeometry(QtCore.QRect(80, 63, 50, 20))
         self.lineEdit_30.setObjectName("lineEdit")
         #A
         self.label_3 = QtGui.QLabel('A',Dialog)
         self.label_3.setGeometry(QtCore.QRect(50, 93, 61, 16))
-        self.label_3.setObjectName("label_3")
+        self.label_3.setStyleSheet("color: gray;")
         self.lineEdit_3 = QtGui.QLineEdit(Dialog)
         self.lineEdit_3.setGeometry(QtCore.QRect(80, 93, 50, 20))
         self.lineEdit_3.setObjectName("lineEdit")
         #B
         self.label_6 = QtGui.QLabel('B',Dialog)
         self.label_6.setGeometry(QtCore.QRect(50, 120, 61, 16))
-        self.label_6.setObjectName("label_6")
+        self.label_6.setStyleSheet("color: gray;")
         self.lineEdit_6 = QtGui.QLineEdit(Dialog)
         self.lineEdit_6.setGeometry(QtCore.QRect(80, 120, 50, 20))
         self.lineEdit_6.setObjectName("lineEdit_6") 
         #C
         self.label_50 = QtGui.QLabel('C',Dialog)
         self.label_50.setGeometry(QtCore.QRect(50, 150, 61, 16))
-        self.label_50.setObjectName("label_6")
+        self.label_50.setStyleSheet("color: gray;")
         self.lineEdit_50 = QtGui.QLineEdit(Dialog)
         self.lineEdit_50.setGeometry(QtCore.QRect(80, 150, 50, 20))
         self.lineEdit_50.setObjectName("lineEdit_50")   
         #D
         self.label_7 = QtGui.QLabel('D',Dialog)
         self.label_7.setGeometry(QtCore.QRect(50, 180, 61, 16))
-        self.label_7.setObjectName("label_7")
+        self.label_7.setStyleSheet("color: gray;")
         self.lineEdit_7 = QtGui.QLineEdit(Dialog)
         self.lineEdit_7.setGeometry(QtCore.QRect(80, 180, 50, 20))
         self.lineEdit_7.setObjectName("lineEdit_7")
         #E
         self.label_8 = QtGui.QLabel('E',Dialog)
         self.label_8.setGeometry(QtCore.QRect(50, 210, 61, 16))
-        self.label_8.setObjectName("label_8")
+        self.label_8.setStyleSheet("color: gray;")
         self.lineEdit_8 = QtGui.QLineEdit(Dialog)
         self.lineEdit_8.setGeometry(QtCore.QRect(80, 210, 50, 20))
         self.lineEdit_8.setObjectName("lineEdit_8")
         #d1
         self.label_9 = QtGui.QLabel('d1',Dialog)
         self.label_9.setGeometry(QtCore.QRect(50, 240, 61, 16))
-        self.label_9.setObjectName("label_9")
+        self.label_9.setStyleSheet("color: gray;")
         self.lineEdit_9 = QtGui.QLineEdit(Dialog)
         self.lineEdit_9.setGeometry(QtCore.QRect(80, 240, 50, 20))
         self.lineEdit_9.setObjectName("lineEdit_9") 
         #d2
         self.label_10 = QtGui.QLabel('d2',Dialog)
         self.label_10.setGeometry(QtCore.QRect(140, 63, 61, 16))
-        self.label_10.setObjectName("label_10")
+        self.label_10.setStyleSheet("color: gray;")
         self.lineEdit_10 = QtGui.QLineEdit(Dialog)
         self.lineEdit_10.setGeometry(QtCore.QRect(160, 63, 50, 20))
         self.lineEdit_10.setObjectName("lineEdit_10") 
         #d3
         self.label_11 = QtGui.QLabel('d3',Dialog)
         self.label_11.setGeometry(QtCore.QRect(140, 90, 61, 16))
-        self.label_11.setObjectName("label_11")
+        self.label_11.setStyleSheet("color: gray;")
         self.lineEdit_11 = QtGui.QLineEdit(Dialog)
         self.lineEdit_11.setGeometry(QtCore.QRect(160, 90, 50, 20))
         self.lineEdit_11.setObjectName("lineEdit_11")
         #t1
         self.label_12 = QtGui.QLabel('t1',Dialog)
         self.label_12.setGeometry(QtCore.QRect(140, 120, 61, 16))
-        self.label_12.setObjectName("label_12")
+        self.label_12.setStyleSheet("color: gray;")
         self.lineEdit_12 = QtGui.QLineEdit(Dialog)
         self.lineEdit_12.setGeometry(QtCore.QRect(160, 120, 50, 20))
         self.lineEdit_12.setObjectName("lineEdit_12")
         #t2
         self.label_13 = QtGui.QLabel('t2',Dialog)
         self.label_13.setGeometry(QtCore.QRect(140, 150, 61, 16))
-        self.label_13.setObjectName("label_13")
+        self.label_13.setStyleSheet("color: gray;")
         self.lineEdit_13 = QtGui.QLineEdit(Dialog)
         self.lineEdit_13.setGeometry(QtCore.QRect(160, 150, 50, 20))
         self.lineEdit_13.setObjectName("lineEdit_13")  
         #t3
         self.label_14 = QtGui.QLabel('t3',Dialog)
         self.label_14.setGeometry(QtCore.QRect(140, 180, 61, 16))
-        self.label_14.setObjectName("label_14")
+        self.label_14.setStyleSheet("color: gray;")
         self.lineEdit_14 = QtGui.QLineEdit(Dialog)
         self.lineEdit_14.setGeometry(QtCore.QRect(160, 180, 50, 20))
         self.lineEdit_14.setObjectName("lineEdit_14")
         #t4
         self.label_15 = QtGui.QLabel('t4',Dialog)
         self.label_15.setGeometry(QtCore.QRect(140, 210, 61, 16))
-        self.label_15.setObjectName("label_15")
+        self.label_15.setStyleSheet("color: gray;")
         self.lineEdit_15 = QtGui.QLineEdit(Dialog)
         self.lineEdit_15.setGeometry(QtCore.QRect(160, 210, 50, 20))
         self.lineEdit_15.setObjectName("lineEdit_15")
@@ -142,7 +143,7 @@ class Ui_Dialog(object):
         self.label_5 = QtGui.QLabel(Dialog)
         self.label_5.setGeometry(QtCore.QRect(225, 0, 160, 270))
         #self.label_5.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_5.setObjectName("label_5")
+        self.label_5.setStyleSheet("color: gray;")
 
         #実行
         self.pushButton = QtGui.QPushButton('Create',Dialog)
@@ -286,6 +287,9 @@ class Ui_Dialog(object):
             obj.L=L    
             obj.D=D
             obj.E=E
+            obj.d1=d1
+            obj.d2=d2
+            obj.d3=d3
         obj.BeltWidth=self.comboBox.currentText()    
         FreeCAD.ActiveDocument.recompute() 
     def create(self):
@@ -308,11 +312,77 @@ class Ui_Dialog(object):
         obj.addProperty("App::PropertyFloat", "D",label).D=D  
         obj.addProperty("App::PropertyFloat", "E",label).E=E  
         obj.addProperty("App::PropertyFloat", "L",label).L=L  
-
+        obj.addProperty("App::PropertyFloat", "d1",label).d1=d1
+        obj.addProperty("App::PropertyFloat", "d2",label).d2=d2
+        obj.addProperty("App::PropertyFloat", "d3",label).d3=d3
         paramPulley.Pulleys(obj)
         obj.ViewObject.Proxy=0
+
+        doc = App.ActiveDocument
+        new_obj = doc.ActiveObject 
+        #'Assembly' オブジェクトを探して追加する
+        target_folder = doc.getObject('Assembly')
+        if target_folder:
+            target_folder.addObject(new_obj)
+            doc.recompute()
+        view = Gui.ActiveDocument.ActiveView
+        obj.ViewObject.Visibility = True
+        sep = coin.SoSeparator()
+        trans = coin.SoTranslation()
+        sep.addChild(trans)
+        view.getSceneGraph().addChild(sep)
+        callbacks = {}
+        
+        # -----------------------------
+        def move_cb(info):
+            pos = info["Position"]
+            p = view.getPoint(pos)
+            trans.translation.setValue(p)
+            obj.Placement.Base = p
+        
+        # -----------------------------
+        def click_cb(info):
+            if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                # ★ 直接 finish() を呼ばない
+                QtCore.QTimer.singleShot(0, finish)
+        
+        # -----------------------------
+        def key_cb(info):
+            if info.get("Key") == "ESCAPE":
+                QtCore.QTimer.singleShot(0, cancel)
+        
+        # -----------------------------
+        def finish():
+            try:
+                view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                view.removeEventCallback("SoKeyboardEvent", callbacks["key"])
+            except:
+                pass
+        
+            obj.ViewObject.Visibility = True
+        
+            try:
+                view.getSceneGraph().removeChild(sep)
+            except:
+                pass
+        
+            App.ActiveDocument.recompute()
+        
+        # -----------------------------
+        def cancel():
+            finish()
+            try:
+                App.ActiveDocument.removeObject(obj.Name)
+            except:
+                pass
+        
+        # -----------------------------
+        callbacks["move"]  = view.addEventCallback("SoLocation2Event", move_cb)
+        callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)
+        callbacks["key"]   = view.addEventCallback("SoKeyboardEvent", key_cb)    
         FreeCAD.ActiveDocument.recompute()   
-        Gui.SendMsgToActiveView("ViewFit")    
+        #Gui.SendMsgToActiveView("ViewFit")    
 
 class main():
         d = QtGui.QWidget()
@@ -320,8 +390,4 @@ class main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()
-        # スクリプトのウィンドウを取得
-        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
-        # 閉じるボタンを無効にする
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
-     
+

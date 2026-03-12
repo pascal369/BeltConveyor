@@ -33,6 +33,9 @@ class Pulleys:
         D=App.ActiveDocument.getObject(label).D
         E=App.ActiveDocument.getObject(label).E
         L=float(App.ActiveDocument.getObject(label).L)
+        d1=float(App.ActiveDocument.getObject(label).d1)
+        d2=float(App.ActiveDocument.getObject(label).d2)
+        d3=float(App.ActiveDocument.getObject(label).d3)
         #print(L)
         #L=sa[0]
         A=sa[1]
@@ -40,9 +43,9 @@ class Pulleys:
         C=sa[3]
         #D=sa[4]
         #E=sa[5]
-        d1=sa[6]
-        d2=sa[7]
-        d3=sa[8]
+        #d1=sa[6]
+        #d2=sa[7]
+        #d3=sa[8]
         t1=sa[9]
         t2=sa[10]
         t3=sa[11]
@@ -144,6 +147,9 @@ class Pulleys:
         obj.BeltWidth=BeltWidth
         obj.D=D
         obj.E=E
+        obj.d1=d1
+        obj.d2=d2
+        obj.d3=d3
         obj.L=sa[0]  
         #print(sa[0])
         try:     
@@ -158,7 +164,7 @@ class Pulleys:
         else:
             BendP(self) 
             obj.Shape=c00
-        FreeCAD.ActiveDocument.recompute()       
+        #FreeCAD.ActiveDocument.recompute()       
             
 
         
