@@ -161,6 +161,6 @@ class main():
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()  
         ## 閉じるボタンを無効にする
-        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd') 
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)            
+        #script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd') 
+        #script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)            
         

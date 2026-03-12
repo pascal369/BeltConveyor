@@ -11,16 +11,16 @@ from Belt_data import mtrply_data
 
 type_data=['MotorPulley',]
 BeltW=['400','450','500','600','700','750','800','900',]
-#       B0     b1     b2     t0    D0    d1   d2    Ls    h0   h1  h2  z   zb    zs    za     zr    vx   vh    vh2   hsk   hsk2  hwa
-BDim={'400':( 145,   127.5,  10,  290,  260,  200,  500,  180, 25, 27, 20, 160,  263,  75 ,  182,  550,  -21,   98,  150,  350,   0),	
-      '450':( 165,   142.5,  10,  300,  260,  200,  500,  180, 29, 42, 16, 160,  260,  75 ,  182,  600,  -15,   98,  150,  350,   0),
-      '500':( 180,   160.0,  10,  300,  300,  200,  500,  180, 29, 43, 16, 160,  260,  75 ,  182,  600,  -15,   98,  150,  360,   0),
-      '600':( 210,   195.0,  10,  360,  300,  200,  500,  180, 35, 65, -2, 150,  255,  75 ,  200,  700,   15,  120,  150,  390,  15),
-      '700':( 250,   225.0,  10,  360,  300,  200,  500,  180, 35, 65, -2, 155,  255,  75 ,  205,  750,   15,  120,  150,  400,  30),
-      '750':( 265,   242.5,  10,  360,  390,  200,  500,  180, 18, 47, 10, 170,  270,  95 ,  220,  800,   -2,  120,  150,  430,  40),
-      '800':( 280,   260.0,  10,  460,  390,  200,  500,  180, 57,105,-30, 125,  230,  60 ,  233,  900,   70,  155,  150,  440,  75),
-      '900':( 315,   292.5,  10,  520,  440,  200,  500,  180, 80,150,-53, 100,  210,  40 ,  270,  950,  102,  165,  150,  450, 125),
-      '1000':(345,   327.5,  10,  520,  440,  200,  500,  180, 80,150,-53, 160,  260,  60 ,  200,  900,   70,  200,  150,  394, 125),
+#       B0     b1     b2     t0    D0    d1   d2    Ls    h0   h1  h2  z   zb    zs    za     zr    vx   vh    vh2   hsk   hsk2  hwa Y
+BDim={'400':( 145,   127.5,  10,  290,  260,  200,  500,  180, 25, 27, 20, 160,  263,  75 ,  182,  550,  -21,   98,  150,  350,   0, 310 ),	
+      '450':( 165,   142.5,  10,  300,  260,  200,  500,  180, 29, 42, 16, 160,  260,  75 ,  182,  600,  -15,   98,  150,  350,   0, 335 ),
+      '500':( 180,   160.0,  10,  300,  300,  200,  500,  180, 29, 43, 16, 160,  260,  75 ,  182,  600,  -15,   98,  150,  360,   0, 360 ),
+      '600':( 210,   195.0,  10,  360,  300,  200,  500,  180, 35, 65, -2, 150,  255,  75 ,  200,  700,   15,  120,  150,  390,  15, 410 ),
+      '700':( 250,   225.0,  10,  360,  300,  200,  500,  180, 35, 65, -2, 155,  255,  75 ,  205,  750,   15,  120,  150,  400,  30, 460 ),
+      '750':( 265,   242.5,  10,  360,  390,  200,  500,  180, 18, 47, 10, 170,  270,  95 ,  220,  800,   -2,  120,  150,  430,  40, 485 ),
+      '800':( 280,   260.0,  10,  460,  390,  200,  500,  180, 57,105,-30, 125,  230,  60 ,  233,  900,   70,  155,  150,  440,  75, 510 ),
+      '900':( 315,   292.5,  10,  520,  440,  200,  500,  180, 80,150,-53, 100,  210,  40 ,  270,  950,  102,  165,  150,  450, 125, 560 ),
+      '1000':(345,   327.5,  10,  520,  440,  200,  500,  180, 80,150,-53, 160,  260,  60 ,  200,  900,   70,  200,  150,  394, 125, 610 ),
       }
       
 # 画面を並べて表示する
@@ -128,7 +128,7 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setParts)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.select_objects_by_multiple_labels)
-        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
+        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
         for i in range(2):
             QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
 
@@ -252,10 +252,11 @@ class Ui_Dialog(object):
              if selected_object.TypeId == "App::Part":
                  parts_group = selected_object
                  for obj in parts_group.Group:
-                     if obj.TypeId == "Spreadsheet::Sheet":
+                     print(obj.Label)
+                     if obj.Label== "shtFrame":
                          spreadsheet = obj
 
-        self.comboBox_type.setCurrentText(spreadsheet.getContents('A1'))
+        self.comboBox_type.setCurrentText(spreadsheet.getContents('A1')[1:])
         self.comboBox_B.setCurrentText(spreadsheet.getContents('B0'))     
         self.le_C.setText(spreadsheet.getContents('C0'))  
         self.le_h.setText(spreadsheet.getContents('Ht'))
@@ -284,7 +285,6 @@ class Ui_Dialog(object):
         """グループ以下を再帰的に探索し、ラベルが完全一致するオブジェクトを収集"""
         matched = []
         for obj in getattr(group, "Group", []):
-            print(obj.Label)
             if obj.Label=='Carrier':
                 Carrier=obj
             elif obj.Label=='Return':
@@ -336,7 +336,6 @@ class Ui_Dialog(object):
             
 
     def select_objects_by_multiple_labels(self):
-        #print('nnnnnnnnnnnnn')
         """選択したフォルダ以下で、指定した複数ラベル名のオブジェクトを選択"""
         sel = Gui.Selection.getSelection()
         if not sel:
@@ -364,143 +363,170 @@ class Ui_Dialog(object):
         #   print('error')
         #   return
     def update(self):
-        try:
-            key=self.comboBox_B.currentText()
-            sa=BDim[key]
-            L=self.le_C.text()
-            Ht=self.le_h.text()
-            k=self.le_k.text()
-            W0=float(key)+350
-            
-            spreadsheet.set('B2',L)
-            spreadsheet.set('B0',key)
-            spreadsheet.set('b1',str(sa[0]))#b1
-            spreadsheet.set('b2',str(sa[1]))#b2
-            spreadsheet.set('t0',str(sa[2]))#t0
-            spreadsheet.set('D0',str(sa[3]))#D0  
-            spreadsheet.set('d2',str(sa[5]))#d2
-            spreadsheet.set('Ls',str(sa[6]))#Ls
-            spreadsheet.set('h0',str(sa[7]))#h0
-            spreadsheet.set('h1',str(sa[8]))#h1
-            spreadsheet.set('h2',str(sa[9]))#h2
-            spreadsheet.set('z',str(sa[10]))#z
-            spreadsheet.set('zb',str(sa[11]))#zb
-            spreadsheet.set('zs',str(sa[12]))#zs
-            spreadsheet.set('za',str(sa[13]))#za
-            spreadsheet.set('zr',str(sa[14]))#zr
-            spreadsheet.set('vx',str(sa[15]))#vx
-            spreadsheet.set('vh',str(sa[16]))#vh
-            spreadsheet.set('vh2',str(sa[17]))#vh2
-            spreadsheet.set('hsk',str(sa[18]))#hsk
-            spreadsheet.set('hsk2',str(sa[19]))#hsk2
-            spreadsheet.set('hwa',str(sa[20]))#hwa
-            spreadsheet.set('Ht',Ht)#Ht
-            spreadsheet.set('k',k)#k
-            spreadsheet.set('W0',str(W0))#W0
-            
-            C0=spreadsheet.getContents('C0') 
-            post_c=int((float(C0)-1300)/2500)
-            post_x=round((float(C0)-1300)/(post_c+1),2)
-            spreadsheet.set('post_c',str(post_c))
-            spreadsheet.set('post_x',str(post_x))
-            
-            Take_upPulley.BeltWidth=spreadsheet.getContents('B0')
-            MotorPulley.BeltWidth=spreadsheet.getContents('B0')
-            Carrier.BeltWidth=spreadsheet.getContents('B0')
-            Self_Aligning_Carrier.BeltWidth=spreadsheet.getContents('B0')
-            Return.BeltWidth=spreadsheet.getContents('B0')
-            Self_Aligning_Return.BeltWidth=spreadsheet.getContents('B0')
-            BendPulley.BeltWidth=spreadsheet.getContents('B0')
-            
-            g0=7.85
-            g=takeUpAssy.Shape.Volume*g0*1000/10**9
-            takeUpAssy.mass=g
-            
-            g0=7.85
-            g=round(bendPulley.Shape.Volume*g0*1000/10**9,2) 
-            bendPulley.mass=g
+        key=self.comboBox_B.currentText()
+        sa=BDim[key]
+        L=self.le_C.text()
+        Ht=self.le_h.text()
+        k=self.le_k.text()
+        W0=float(key)+350
+        
+        spreadsheet.set('B2',L)
+        spreadsheet.set('B0',key)
+        spreadsheet.set('b1',str(sa[0]))#b1
+        spreadsheet.set('b2',str(sa[1]))#b2
+        spreadsheet.set('t0',str(sa[2]))#t0
+        spreadsheet.set('D0',str(sa[3]))#D0  
+        spreadsheet.set('d2',str(sa[5]))#d2
+        spreadsheet.set('Ls',str(sa[6]))#Ls
+        spreadsheet.set('h0',str(sa[7]))#h0
+        spreadsheet.set('h1',str(sa[8]))#h1
+        spreadsheet.set('h2',str(sa[9]))#h2
+        spreadsheet.set('z',str(sa[10]))#z
+        spreadsheet.set('zb',str(sa[11]))#zb
+        spreadsheet.set('zs',str(sa[12]))#zs
+        spreadsheet.set('za',str(sa[13]))#za
+        spreadsheet.set('zr',str(sa[14]))#zr
+        spreadsheet.set('vx',str(sa[15]))#vx
+        spreadsheet.set('vh',str(sa[16]))#vh
+        spreadsheet.set('vh2',str(sa[17]))#vh2
+        spreadsheet.set('hsk',str(sa[18]))#hsk
+        spreadsheet.set('hsk2',str(sa[19]))#hsk2
+        spreadsheet.set('Y',str(sa[21]))#hsk2
+        #spreadsheet.set('hwa',str(sa[20]))#hwa
+        spreadsheet.set('Ht',Ht)#Ht
+        spreadsheet.set('k',k)#k
+        spreadsheet.set('W0',str(W0))#W0
+        
+        C0=spreadsheet.getContents('C0') 
+        post_c=int((float(C0)-1300)/2500)
+        post_x=round((float(C0)-1300)/(post_c+1),2)
+        spreadsheet.set('post_c',str(post_c))
+        spreadsheet.set('post_x',str(post_x))
+        
+        Take_upPulley.BeltWidth=spreadsheet.getContents('B0')
+        MotorPulley.BeltWidth=spreadsheet.getContents('B0')
+        Carrier.BeltWidth=spreadsheet.getContents('B0')
+        Self_Aligning_Carrier.BeltWidth=spreadsheet.getContents('B0')
+        Return.BeltWidth=spreadsheet.getContents('B0')
+        Self_Aligning_Return.BeltWidth=spreadsheet.getContents('B0')
+        #.BeltWidth=spreadsheet.getContents('B0')
+        g0=7.85
+        g=takeUpAssy.Shape.Volume*g0*1000/10**9
+        takeUpAssy.mass=g
+        
+       #g0=7.85
+       #g=round(bendPulley.Shape.Volume*g0*1000/10**9,2) 
+       #bendPulley.mass=g
+#     g0=7.85
+        g=round(Skirt.Shape.Volume*g0*1000/10**9,2) 
+        Skirt.mass=g
+        
+        g0=7.85
+        g=round(Cover.Shape.Volume*g0*1000/10**9,2) 
+        Cover.mass=g
+        
+        g0=7.85
+        g=round(waterReceptacle.Shape.Volume*g0*1000/10**9,2) 
+        waterReceptacle.mass=g
+        
+        g0=1.0
+        g=round(Belt.Shape.Volume*g0*1000/10**9,2) 
+        Belt.mass=g
+        Belt.Standard='B='+ key + ',' + 'L='+C0
+        
+#     sa=BeltCv.Carrier_lst[key]
+        g=sa[8]
+        Carrier.mass=g
+        Carrier.count=carrierArray.Count
+        sa=BeltCv.Return_lst[key]
+        g=sa[7]
+        Return.mass=g
+        Return.count=returnArray.Count
+        
+        g0=7.85
+        g=round(Scraper.Shape.Volume*g0*1000/10**9,2) 
+        Scraper.mass=g
+        
+#     g0=7.85
+        g=round(Frame.Shape.Volume*g0*1000/10**9,2) 
+        Frame.mass=g
+        Frame.Standard='B='+key + ',' + 'L='+C0
+        
+        sa=mtrply_data.pulley_dim[key]
+        standard=sa[16]
+        
+        g=sa[24]
+        MotorPulley.mass=g
+        
+        MotorPulley.Standard=standard
+#     sa=BeltCv.J_Carrier_lst[key]
+        g=sa[9]
+        Self_Aligning_Carrier.mass=g
+        
+        sa=BeltCv.J_Return_lst[key]
+        g=sa[9]
+        Self_Aligning_Return.mass=g
+        App.ActiveDocument.recompute()
 
-            g0=7.85
-            g=round(Skirt.Shape.Volume*g0*1000/10**9,2) 
-            Skirt.mass=g
-            
-            g0=7.85
-            g=round(Cover.Shape.Volume*g0*1000/10**9,2) 
-            Cover.mass=g
-            
-            g0=7.85
-            g=round(waterReceptacle.Shape.Volume*g0*1000/10**9,2) 
-            waterReceptacle.mass=g
-            
-            g0=1.0
-            g=round(Belt.Shape.Volume*g0*1000/10**9,2) 
-            Belt.mass=g
-            Belt.Standard='B='+ key + ',' + 'L='+C0
-            
-
-            sa=BeltCv.Carrier_lst[key]
-            g=sa[8]
-            Carrier.mass=g
-            Carrier.count=carrierArray.Count
-
-            
-            sa=BeltCv.Return_lst[key]
-            g=sa[7]
-            Return.mass=g
-            Return.count=returnArray.Count
-            
-            g0=7.85
-            g=round(Scraper.Shape.Volume*g0*1000/10**9,2) 
-            Scraper.mass=g
-            
-
-            g0=7.85
-            g=round(Frame.Shape.Volume*g0*1000/10**9,2) 
-            Frame.mass=g
-            Frame.Standard='B='+key + ',' + 'L='+C0
-            
-            sa=mtrply_data.pulley_dim[key]
-            standard=sa[16]
-            
-            g=sa[24]
-            MotorPulley.mass=g
-            
-            MotorPulley.Standard=standard
-            print('ggggggggggggggggggggggggggg')
-
-            sa=BeltCv.J_Carrier_lst[key]
-            g=sa[9]
-            Self_Aligning_Carrier.mass=g
-            
-            sa=BeltCv.J_Return_lst[key]
-            g=sa[9]
-            Self_Aligning_Return.mass=g
-            App.ActiveDocument.recompute()
-        except:
-            print('error push import')
-            return    
     
     def create(self): 
-         #W0=self.comboBox_B.currentText()
+         doc=App.ActiveDocument
          if self.comboBox_type.currentText()=='MotorPulley':   
              fname='BeltCv_Assy_m.FCStd' 
-         #else:
-         #    return    
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base,'Belt_data',fname) 
-         print(joined_path)
-         try:
-            Gui.ActiveDocument.mergeProject(joined_path)
-         except:
-            doc=App.newDocument()
-            Gui.ActiveDocument.mergeProject(joined_path)
-         Gui.SendMsgToActiveView("ViewFit")   
+
+          # --- インポート前のオブジェクトリストを取得 ---
+         old_obj_names = [o.Name for o in doc.Objects]
+          # マージ実行
+         Gui.ActiveDocument.mergeProject(joined_path)
+         doc.recompute() # 一旦再計算して内部IDを確定させる
+         # --- インポート後に増えたオブジェクトを特定 ---
+         new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
+         
+         if not new_objs:
+             print("Error: オブジェクトが読み込まれませんでした。")
+             return
+         #
+         move_target = None
+         for o in new_objs:
+             if "Assy_MotorPulley"  in o.Label or "Assy_MotorPulley"  in o.Name:
+                 move_target = o
+                 break
+             
+         # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
+         if not move_target:
+             move_target = new_objs[0]
+         view = Gui.ActiveDocument.ActiveView
+         callbacks = {}
+         def move_cb(info):
+             pos = info["Position"]
+             # 重要：ビュー平面上の3D座標を取得
+             p = view.getPoint(pos)
+             if move_target:
+                 move_target.Placement.Base = p
+                 #view.softRedraw()
+         def click_cb(info):
+             if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                 # コールバック解除
+                 view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                 view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                 App.ActiveDocument.recompute()
+                 print("Placed: " + move_target.Label)
+         # イベント登録
+         callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
+         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)  
          
 class main():
-        d = QtGui.QWidget()
-        d.ui = Ui_Dialog()
-        d.ui.setupUi(d)
-        d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
-        d.show() 
-        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd') 
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)            
+    d = QtGui.QWidget()
+    d.ui = Ui_Dialog()
+    d.ui.setupUi(d)
+    d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+    d.show() 
+
+
+    
+    
+
+       
+                

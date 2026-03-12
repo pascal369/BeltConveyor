@@ -2,6 +2,7 @@
 import os
 import sys
 import csv
+import importlib
 import FreeCAD as App
 import FreeCADGui as Gui
 from PySide import QtGui
@@ -15,6 +16,8 @@ import paramReturnRoller
 import paramSideRoller
 import paramCarrier
 import paramReturn
+from pivy import coin
+from PySide2 import QtCore
 Vscraper_haba=['500','600','750']
 belt_haba=['400','450','500','600','700','750','800','900','1000',]
 belt_buhin=['Assy','Frame','Belt','Pulleys','MotorPulley','Carrier','Return','BendPulleyAssy','CarrierRoller','ReturnRoller',
@@ -268,7 +271,7 @@ class Ui_Dialog(object):
         global pic
         buhin=self.comboBox_2.currentText()
         spec=self.comboBox_3.currentText()
-        
+        #print(buhin)
         if buhin=='CarrierRoller':
             self.comboBox.show()
             self.comboBox_3.show()
@@ -363,7 +366,7 @@ class Ui_Dialog(object):
             self.comboBox_3.hide()  
             self.comboBox_4.hide()  
             pic=buhin+'.png'  
-            print(pic)  
+            #print(pic)  
         elif  buhin=='Skirt':
             self.comboBox.show() 
             self.comboBox_3.hide()  
@@ -432,13 +435,19 @@ class Ui_Dialog(object):
         self.label_5.setPixmap(QtGui.QPixmap(joined_path))
 
     def create(self):
-        if buhin=='Pulleys':
-            import Belt_data.BltCvPulley
-            pass
-
+        import sys
+        import importlib
+       
+        if buhin == 'Pulleys':
+            if 'Belt_data.BltCvPulley' not in sys.modules:
+                 import Belt_data.BltCvPulley
+            else:
+                 importlib.reload(sys.modules['Belt_data.BltCvPulley'])
         elif buhin=='MotorPulley':
-            import Belt_data.MotorPulley
-            pass
+            if 'Belt_data.MotorPulley' not in sys.modules:
+                 import Belt_data.MotorPulley
+            else:
+                 importlib.reload(sys.modules['Belt_data.MotorPulley'])
 
         elif buhin=='CarrierRoller':
             label=buhin
@@ -484,7 +493,7 @@ class Ui_Dialog(object):
             obj.ViewObject.Proxy=0
             FreeCAD.ActiveDocument.recompute()   
                
-            return
+           # return
         elif buhin=='SideRoller':
             label=buhin
             try:
@@ -568,45 +577,183 @@ class Ui_Dialog(object):
             elif buhin[:11]=='PillowBlock':
                 fname=self.comboBox_3.currentText()+'.FCStd'
                 joined_path = os.path.join(base, 'Belt_data','brg_data',fname) 
-            try:
-                Gui.ActiveDocument.mergeProject(joined_path)
-            except:
-                doc=App.newDocument()
-                Gui.ActiveDocument.mergeProject(joined_path)  
-            App.ActiveDocument.recompute()  
-            Gui.ActiveDocument.ActiveView.fitAll()
-            return  
+            #try:
+            #    Gui.ActiveDocument.mergeProject(joined_path)
+            #except:
+            #    doc=App.newDocument()
+            #    Gui.ActiveDocument.mergeProject(joined_path)  
+            #App.ActiveDocument.recompute()  
+            #Gui.ActiveDocument.ActiveView.fitAll()
+            #  
         elif buhin=='BendPulleyAssy':
             base=os.path.dirname(os.path.abspath(__file__)) 
             fname='BendPulleyAssy.FCStd'
             joined_path = os.path.join(base,'Belt_data',fname) 
-            try:
-                Gui.ActiveDocument.mergeProject(joined_path)
-            except:
-                doc=App.newDocument()
-                Gui.ActiveDocument.mergeProject(joined_path)  
-            App.ActiveDocument.recompute()  
-            Gui.ActiveDocument.ActiveView.fitAll()    
-            return
-        elif buhin=='Assy':
-            import Belt_Assy
-        elif buhin=='Frame':
-            import Frame  
-        elif buhin=='Belt':
-            import Belt 
-            return 
-        elif buhin=='V_shapedScraper' :
-             import vScraper
-             return
-        elif buhin=='Take-UpAssy':
-            import TakeUpAssy     
 
+            #print(joined_path)
+            #try:
+            #    Gui.ActiveDocument.mergeProject(joined_path)
+            #except:
+            #    doc=App.newDocument()
+            #    Gui.ActiveDocument.mergeProject(joined_path)  
+            #App.ActiveDocument.recompute()  
+            #Gui.ActiveDocument.ActiveView.fitAll()    
+            #return
+        elif buhin=='Assy':
+            import importlib
+            import sys
+            if 'Belt_Assy' not in sys.modules:
+                 import Belt_Assy
+            else:
+                 importlib.reload(sys.modules['Belt_Assy'])
+        elif buhin=='Frame':
+            import importlib
+            import sys
+            if 'Frame' not in sys.modules:
+                 import Frame
+            else:
+                 importlib.reload(sys.modules['Frame'])
+        elif buhin=='Belt':
+            import importlib
+            import sys
+            if 'Belt' not in sys.modules:
+                 import Belt
+            else:
+                 importlib.reload(sys.modules['Belt'])
+        elif buhin=='V_shapedScraper' :
+             import importlib
+             import sys
+             if 'vScraper' not in sys.modules:
+                  import vScraper
+             else:
+                  importlib.reload(sys.modules['vScraper'])
+        elif buhin=='Take-UpAssy':
+            import importlib
+            import sys
+            if 'TakeUpAssy' not in sys.modules:
+                 import TakeUpAssy
+            else:
+                 importlib.reload(sys.modules['TakeUpAssy'])
         elif buhin=='Skirt':
             import Skirt  
+            import importlib
+            importlib.reload(Skirt)
         elif buhin=='Cover':
-            import Cover   
+            import Cover 
+            import importlib
+            importlib.reload(Cover)  
         elif buhin=='Receptacle':
-            import Receptacle      
+            import Receptacle 
+            import importlib
+            importlib.reload(Receptacle)  
+           
+        if buhin=='Carrier' or buhin=='Return' or buhin=='CarrierRoller' or buhin=='ReturnRoller'\
+        or buhin=='SideRoller':
+            doc = App.ActiveDocument
+            new_obj = doc.ActiveObject 
+            #'Assembly' オブジェクトを探して追加する
+            target_folder = doc.getObject('Assembly')
+            if target_folder:
+                target_folder.addObject(new_obj)
+                doc.recompute()
+            view = Gui.ActiveDocument.ActiveView
+            obj.ViewObject.Visibility = True
+            sep = coin.SoSeparator()
+            trans = coin.SoTranslation()
+            sep.addChild(trans)
+            view.getSceneGraph().addChild(sep)
+            callbacks = {}
+            # -----------------------------
+            def move_cb(info):
+                pos = info["Position"]
+                p = view.getPoint(pos)
+                trans.translation.setValue(p)
+                obj.Placement.Base = p
+            # -----------------------------
+            def click_cb(info):
+                if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                    # ★ 直接 finish() を呼ばない
+                    QtCore.QTimer.singleShot(0, finish)
+             # -----------------------------
+            def key_cb(info):
+                if info.get("Key") == "ESCAPE":
+                    QtCore.QTimer.singleShot(0, cancel)
+            # -----------------------------
+            def finish():
+                try:
+                    view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                    view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                    view.removeEventCallback("SoKeyboardEvent", callbacks["key"])
+                except:
+                    pass
+                obj.ViewObject.Visibility = True
+                try:
+                    view.getSceneGraph().removeChild(sep)
+                except:
+                    pass
+                App.ActiveDocument.recompute()
+             # -----------------------------
+            def cancel():
+                finish()
+                try:
+                    App.ActiveDocument.removeObject(obj.Name)
+                except:
+                    pass
+            # -----------------------------
+            callbacks["move"]  = view.addEventCallback("SoLocation2Event", move_cb)
+            callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)
+            callbacks["key"]   = view.addEventCallback("SoKeyboardEvent", key_cb)
+            FreeCAD.ActiveDocument.recompute()  
+        #print(buhin) 
+        if buhin=='BendPulleyAssy' or buhin=='Take-UP' or buhin=='PillowBlock'\
+        or buhin=='BendPulleyAssy':
+             doc=App.ActiveDocument
+             # --- インポート前のオブジェクトリストを取得 ---
+             old_obj_names = [o.Name for o in doc.Objects]
+              # マージ実行
+             Gui.ActiveDocument.mergeProject(joined_path)
+             doc.recompute() # 一旦再計算して内部IDを確定させる
+             # --- インポート後に増えたオブジェクトを特定 ---
+             new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
+             if not new_objs:
+                 print("Error: オブジェクトが読み込まれませんでした。")
+                 return
+             #
+             move_target = None
+             for o in new_objs:
+                 if "Pulleys"  in o.Label or "Pulleys"  in o.Name:
+                     move_target = o
+                     break
+                 elif "Take-Up"  in o.Label or "Take-Up"  in o.Name:
+                     move_target = o
+                 elif "PillowBlock"  in o.Label or "PillowBlock"  in o.Name:
+                     move_target = o
+                 elif "BendPulleyAssy"  in o.Label or "BendPulleyAssy"  in o.Name:
+                     move_target = o    
+
+             # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
+             if not move_target:
+                 move_target = new_objs[0]
+             view = Gui.ActiveDocument.ActiveView
+             callbacks = {}
+             def move_cb(info):
+                 pos = info["Position"]
+                 # 重要：ビュー平面上の3D座標を取得
+                 p = view.getPoint(pos)
+                 if move_target:
+                     move_target.Placement.Base = p
+                     #view.softRedraw()
+             def click_cb(info):
+                 if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                     # コールバック解除
+                     view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                     view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                     App.ActiveDocument.recompute()
+                     print("Placed: " + move_target.Label)
+             # イベント登録
+             callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
+             callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)  
+             FreeCAD.ActiveDocument.recompute()
 
 class main():
         d = QtGui.QWidget()
@@ -614,4 +761,7 @@ class main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()
+
+
+
 
